@@ -1,204 +1,145 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package edu.wctc.ajs.ajsmidtermapp.model;
 
-import edu.wctc.ajs.ajsmidtermapp.exception.IllegalUrlReferenceException;
-import edu.wctc.ajs.ajsmidtermapp.exception.NumberOutOfRangeException;
-import edu.wctc.ajs.ajsmidtermapp.exception.NullOrEmptyArgumentException;
+import java.io.Serializable;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Product class that gets and sets all product properties. TODO: Check for null
- * or void params add javadocs.
  *
  * @author Alyson
  */
+@Entity
+@Table(name = "product")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+    @NamedQuery(name = "Product.findByProductId", query = "SELECT p FROM Product p WHERE p.productId = :productId"),
+    @NamedQuery(name = "Product.findByProductName", query = "SELECT p FROM Product p WHERE p.productName = :productName"),
+    @NamedQuery(name = "Product.findByProductType", query = "SELECT p FROM Product p WHERE p.productType = :productType"),
+    @NamedQuery(name = "Product.findByProductPrice", query = "SELECT p FROM Product p WHERE p.productPrice = :productPrice"),
+    @NamedQuery(name = "Product.findByProductImage", query = "SELECT p FROM Product p WHERE p.productImage = :productImage"),
+    @NamedQuery(name = "Product.findByProductDescription", query = "SELECT p FROM Product p WHERE p.productDescription = :productDescription")})
+public class Product implements Serializable {
 
-public final class Product {
-
-    private static final String IMG_REF_FOLDER = "imgs/";
-    private int productId;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "product_id")
+    private Integer productId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 160)
+    @Column(name = "product_name")
     private String productName;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 60)
+    @Column(name = "product_type")
     private String productType;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "product_price")
     private double productPrice;
-    private String productUrlRef;
+    @Size(max = 160)
+    @Column(name = "product_image")
+    private String productImage;
+    @Size(max = 400)
+    @Column(name = "product_description")
     private String productDescription;
 
-    /**
-     * Product Empty Constructor for initializing this class.
-     */
     public Product() {
     }
 
-    /**
-     * Product Constructor passing in the product properties and intializing
-     * them.
-     *
-     * @param productId Unique ID of the product in the database.
-     * @param productName Name of the product.
-     * @param productType Category Type of the product.
-     * @param productPrice Price of the product.
-     * @param productUrlRef URL reference of image storage location for product.
-     * @param productDescription Description of the product.
-     */
-    public Product(int productId, String productName, String productType, double productPrice, String productUrlRef, String productDescription) {
-        if (productId <= 0 || productName.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-        setProductId(productId);
-        setProductName(productName);
-        setProductType(productType);
-        setProductPrice(productPrice);
-        setProductUrlRef(productUrlRef);
-        setProductDescription(productDescription);
-    }
-
-    /**
-     * Gets the product Id and returns it.
-     *
-     * @return product Id
-     */
-    public final int getProductId() {
-        return productId;
-    }
-
-    /**
-     * Sets the product Id.
-     *
-     * @param productId Unique Id of the product.
-     */
-    public final void setProductId(int productId) {
-        if (productId <= 0) {
-            throw new NumberOutOfRangeException();
-        }
+    public Product(Integer productId) {
         this.productId = productId;
     }
 
-    /**
-     * Gets the name of the product.
-     *
-     * @return Name of the product.
-     */
-    public final String getProductName() {
-        return productName;
-    }
-
-    /**
-     * Sets the name of the product.
-     *
-     * @param productName Name of the product.
-     */
-    public final void setProductName(String productName) {
-        if (productName.isEmpty()) {
-            throw new NullOrEmptyArgumentException();
-        }
+    public Product(Integer productId, String productName, String productType, double productPrice) {
+        this.productId = productId;
         this.productName = productName;
-    }
-
-    /**
-     * Gets the product type. Type is the category identification of the
-     * product.
-     *
-     * @return Product category/type.
-     */
-    public final String getProductType() {
-        return productType;
-    }
-
-    /**
-     * sets the product type. Type is the category identification of the
-     * product.
-     *
-     * @param productType Category/Type of the product.
-     */
-    public final void setProductType(String productType) {
-        if (productType == null || productType.isEmpty()) {
-            throw new NullOrEmptyArgumentException();
-        }
         this.productType = productType;
-    }
-
-    /**
-     * Gets the price of the product.
-     *
-     * @return Price of the product.
-     */
-    public final double getProductPrice() {
-        return productPrice;
-    }
-
-    /**
-     * Sets the price of the product.
-     *
-     * @param productPrice Price of the product.
-     */
-    public final void setProductPrice(double productPrice) {
-        if (productPrice <= 0) {
-            throw new NullOrEmptyArgumentException();
-        }
         this.productPrice = productPrice;
     }
 
-    /**
-     * Gets the image url reference for the product. The image URL reference is
-     * "according the the midterm directions" located within an imgs folder. URL
-     * reference will be in the following format: imgs/[imgName].[typeOfImg
-     * ex:jpg, png, etc] ex: imgs/hope.jpg
-     *
-     * @return The URL Reference of the image for the product is returned.
-     */
-    public final String getProductUrlRef() {
-        return productUrlRef;
+    public Integer getProductId() {
+        return productId;
     }
 
-    /**
-     * Set the products image url reference. This url must be a relative url
-     * located within the web pages folder inside and imgs folder. The name of
-     * the folder that the images are located must be called "imgs" otherwise an
-     * exception will occur.
-     *
-     * @param productUrlRef
-     */
-    public final void setProductUrlRef(String productUrlRef) {
-        if (productUrlRef == null || productUrlRef.isEmpty()) {
-            throw new NullOrEmptyArgumentException();
-        }
-        String refFolder = productUrlRef.substring(0, 5);
-        if (!refFolder.equals(IMG_REF_FOLDER)) {
-            throw new IllegalUrlReferenceException();
-        }
-        this.productUrlRef = productUrlRef;
+    public void setProductId(Integer productId) {
+        this.productId = productId;
     }
 
-    /**
-     *
-     * @return
-     */
-    public final String getProductDescription() {
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
+
+    public String getProductDescription() {
         return productDescription;
     }
 
-    public final void setProductDescription(String productDescription) {
+    public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + this.productId;
+        int hash = 0;
+        hash += (productId != null ? productId.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Product)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Product other = (Product) obj;
-        if (this.productId != other.productId) {
+        Product other = (Product) object;
+        if ((this.productId == null && other.productId != null) || (this.productId != null && !this.productId.equals(other.productId))) {
             return false;
         }
         return true;
@@ -206,17 +147,7 @@ public final class Product {
 
     @Override
     public String toString() {
-        return "Product{" + "productId=" + productId + ", productName="
-                + productName + ", productType=" + productType + ", productPrice="
-                + productPrice + ", productUrlRef=" + productUrlRef + ", "
-                + "productDescription=" + productDescription + '}';
+        return "edu.wctc.ajs.ajsmidtermapp.model.Product[ productId=" + productId + " ]";
     }
-
-    //TESTING
-//    public static void main(String[] args) {
-//        Product product = new Product(1, "12oz. Bottled Hope", "Hope", 49.50, "imgs/hope.jpg", "The Original 12 oz Bottle of Hope!");
-//        System.out.println(product.toString());
-//        product.setProductUrlRef("imgs/hope.jpg");
-//    }
-
+    
 }
