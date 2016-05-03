@@ -6,6 +6,7 @@
 package edu.wctc.ajs.ajsmidtermapp.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,10 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -35,6 +38,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Product.findByProductImage", query = "SELECT p FROM Product p WHERE p.productImage = :productImage"),
     @NamedQuery(name = "Product.findByProductDescription", query = "SELECT p FROM Product p WHERE p.productDescription = :productDescription")})
 public class Product implements Serializable {
+
+    @OneToMany(mappedBy = "productId")
+    private Collection<ShoppingCart> shoppingCartCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -148,6 +154,15 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "edu.wctc.ajs.ajsmidtermapp.model.Product[ productId=" + productId + " ]";
+    }
+
+    @XmlTransient
+    public Collection<ShoppingCart> getShoppingCartCollection() {
+        return shoppingCartCollection;
+    }
+
+    public void setShoppingCartCollection(Collection<ShoppingCart> shoppingCartCollection) {
+        this.shoppingCartCollection = shoppingCartCollection;
     }
     
 }
