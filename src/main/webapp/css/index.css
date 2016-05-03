@@ -1,0 +1,96 @@
+/* 
+    Created on : Mar 22, 2016, 12:11:12 PM
+    Author     : Alyson
+*/
+#jumbo{
+    height:225px;
+}
+#jumbo h1{
+    text-align:center;
+    font-family: 'Cinzel Decorative', cursive;
+}
+#jumbo p{
+    text-align:center;
+    font-family: 'Oswald', sans-serif;
+}
+.panel{
+    height:300px;
+}
+.wellHeading, .def, .wellFooter{
+    text-align:center;
+    font-family: 'Cinzel Decorative', cursive;
+}
+.def{
+    text-align:left;
+    font-size:1.8em;
+}
+#imgBox{
+    margin-left:-5%;
+    padding-bottom:8%;
+}
+#imgBox img{
+    height:100px;
+    width:120%;
+    -webkit-box-shadow:2px 2px 2px 2px #999999;
+    -moz-box-shadow:2px 2px 2px 2px #999999;
+    box-shadow:2px 2px 2px 2px #999999;
+}
+.infoInset{
+    padding-left:7%;
+}
+b{
+    font-size:1.2em;
+}
+/*Media Queries*/
+
+@media (max-width: 320px) {
+    .panel{
+        height:auto;
+    }
+   #imgBox img{
+       height:120px;
+       width:90%;
+       margin-left:7%;        
+   }
+  }
+@media (min-width:320px) and (max-width: 480px) {
+    .panel{
+        height:auto;
+    }
+   #imgBox img{
+       height:160px;
+       width:60%;
+       margin-left:12%;        
+   }
+}
+@media (min-width:481px) and (max-width: 640px){
+    .panel{
+        height:auto;
+    }
+    #imgBox img{
+       height:150px;
+       width:80%;
+       margin-left:12%;        
+   }
+}
+@media (min-width:641px) and (max-width: 800px){
+    .panel{
+        height:auto;
+    }
+    #imgBox img{
+       height:200px;
+       width:90%;
+       margin-left:7%;        
+   }
+}
+@media (min-width: 801px) and (max-width: 990px){
+    .panel{
+        height:auto;
+    }
+    #imgBox img{
+       height:200px;
+       width:100%;
+       margin-left:30px;    
+   }
+}
+
