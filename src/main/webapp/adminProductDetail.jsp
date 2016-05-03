@@ -31,14 +31,13 @@
                 <div class="form-group">
                     <label for="productId" class="control-label">Product Id:</label>
                     <div>
-                        <input type="text" class="form-control" name="productId" id="productId" value="${product.productId}" autofocus>
-                        <input type="hidden" id="currAuthorId" name="currProductId" value="${product.productId}"/>
+                        <input type="text" class="form-control" name="productId" id="productId" value="${product.productId}" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="authorName" class="control-label">Product Name:</label>
                     <div>
-                        <input type="text" class="form-control" name="productName" id="productName" value="${product.productName}">
+                        <input type="text" class="form-control" name="productName" id="productName" value="${product.productName}" autofocus>
                     </div>
                 </div>
                 <div class="form-group">
@@ -56,7 +55,7 @@
                 <div class="form-group">
                     <label for="imgUrl" class="control-label">Product Relative Img Url:</label>
                     <div>
-                        <input type="text" class="form-control" name="imgUrl" id="imgUrl" value="${product.productUrlRef}" placeholder="imgs/luck.jpg" >
+                        <input type="text" class="form-control" name="imgUrl" id="imgUrl" value="${product.productImage}" placeholder="imgs/luck.jpg" >
                         <span class="help-block">Image must be in "imgs" folder within the project. Example URL: imgs/hope.jpg</span>
                     </div>
                 </div>

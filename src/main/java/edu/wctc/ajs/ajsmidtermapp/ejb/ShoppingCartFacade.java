@@ -5,7 +5,7 @@
  */
 package edu.wctc.ajs.ajsmidtermapp.ejb;
 
-import edu.wctc.ajs.ajsmidtermapp.model.ShoppingCart;
+import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

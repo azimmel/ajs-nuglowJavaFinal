@@ -5,7 +5,7 @@
  */
 package edu.wctc.ajs.ajsmidtermapp.ejb;
 
-import edu.wctc.ajs.ajsmidtermapp.model.Authorities;
+import edu.wctc.ajs.ajsmidtermapp.entity.Authorities;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

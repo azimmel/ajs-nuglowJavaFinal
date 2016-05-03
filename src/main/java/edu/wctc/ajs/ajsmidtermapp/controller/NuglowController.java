@@ -1,16 +1,13 @@
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
+import edu.wctc.ajs.ajsmidtermapp.ejb.AbstractFacade;
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
-import edu.wctc.ajs.ajsmidtermapp.model.Product;
-import edu.wctc.ajs.ajsmidtermapp.model.ProductService;
+import edu.wctc.ajs.ajsmidtermapp.entity.Product;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.inject.Inject;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.sql.DataSource;
 
 /**
  *
@@ -79,7 +75,7 @@ public class NuglowController extends HttpServlet {
     private static int recordsAffectedInSession = 0;
 
     @Inject
-    private ProductService productService;
+    private AbstractFacade<Product> productService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -95,10 +91,10 @@ public class NuglowController extends HttpServlet {
         String errorMessage;
         String msg;
         String pageDestination;
+        Product product = null;
 
         try {
             try {
-                configDbConnection();
                 request.setAttribute(DATE, getYearDate());
             } catch (Exception ex) {
                 errorMessage = ex.getMessage();
@@ -147,19 +143,13 @@ public class NuglowController extends HttpServlet {
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
-
-                    //do some validation for null.
-                    int recordsCreated = productService.createNewProduct(newProduct, type, price, imgUrl, description);
-                    if (recordsCreated <= 0) {
-                        errorMessage = NO_RECORDS;
-                        request.setAttribute(MSG, errorMessage);
-                    } else if (recordsCreated > 1) {
-                        errorMessage = RECORDS_ERROR;
-                        request.setAttribute(MSG, errorMessage);
-                    } else {
-                        msg = RECORD_CONFIRMED;
-                        request.setAttribute(MSG, msg);
-                    }
+                    product = new Product();
+                    product.setProductName(newProduct);
+                    product.setProductType(type);
+                    product.setProductPrice(Double.parseDouble(price));
+                    product.setProductImage(imgUrl);
+                    product.setProductDescription(description);
+                    productService.create(product);
                     recordsAffectedInSession++;
                     String rc = "" + recordsAffectedInSession;
                     session.setAttribute(RECORDS, rc);
@@ -167,13 +157,15 @@ public class NuglowController extends HttpServlet {
                     pageDestination = RESULTS_PAGE;
                     break;
                 case DETAILS:
-                    String id = request.getParameter(ID);
-                    if (id == null) {
+                    String prodId = request.getParameter(ID);
+                    int id = Integer.parseInt(prodId);
+                    if (id == 0) {
                         request.setAttribute(MSG, DEFAULT_ERROR);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
-                    Product product = productService.getProductById(id);
+                    product = new Product();
+                    product = productService.find(id);
                     request.setAttribute(PRODUCT, product);
                     pageDestination = DETAILS_PAGE;
                     break;
@@ -181,9 +173,7 @@ public class NuglowController extends HttpServlet {
                     String subaction = request.getParameter(SUBMIT);
                     switch (subaction) {
                         case EDIT:
-                            String currentProductId = request.getParameter(CURRENT_PRODUCT_ID);
-                            String newProductId = request.getParameter(ID);
-                            int prodIdTest = Integer.parseInt(newProductId);
+                            String currentProductId = request.getParameter(ID);
                             String newProductName = request.getParameter(NAME);
                             String newType = request.getParameter(TYPE);
                             String newPrice = request.getParameter(PRICE);
@@ -191,8 +181,7 @@ public class NuglowController extends HttpServlet {
                             String newImgUrl = request.getParameter(IMG_URL);
                             String urlSubString = newImgUrl.substring(0, 5);
                             String newDescription = request.getParameter(DESCRIPTION);
-                            if (newProductId == null || prodIdTest <= 0 || prodIdTest > 10000
-                                    || newProductName == null || newProductName.length() < 3
+                            if (newProductName == null || newProductName.length() < 3
                                     || newType == null || newType.length() < 3
                                     || newPrice == null || priceTestEdit <= 0.01
                                     || priceTestEdit > 10000 || newImgUrl == null
@@ -203,58 +192,35 @@ public class NuglowController extends HttpServlet {
                                 pageDestination = DETAILS_PAGE;
                                 break;
                             }
-
-                            int recordsUpdated = productService.updateProductById(currentProductId,
-                                    newProductId, newProductName, newType, newPrice,
-                                    newImgUrl, newDescription);
-                            if (recordsUpdated == 0) {
-                                errorMessage = NO_RECORDS;
-                                request.setAttribute(MSG, errorMessage);
-                                pageDestination = DETAILS_PAGE;
-                            } else if (recordsUpdated > 1) {
-                                errorMessage = RECORDS_ERROR;
-                                request.setAttribute(MSG, errorMessage);
-                                this.getProductList(request, productService);
-                                pageDestination = RESULTS_PAGE;
-                            } else if (recordsUpdated == 1) {
-                                msg = RECORD_CONFIRMED;
-                                request.setAttribute(MSG, msg);
+                            product = new Product();
+                            product.setProductId(Integer.parseInt(currentProductId));
+                            product.setProductName(newProductName);
+                            product.setProductType(newType);
+                            product.setProductPrice(Double.parseDouble(newPrice));
+                            product.setProductImage(newImgUrl);
+                            product.setProductDescription(newDescription);
+                            
+                            productService.edit(product);
+                            
                                 recordsAffectedInSession++;
                                 rc = "" + recordsAffectedInSession;
                                 session.setAttribute(RECORDS, rc);
                                 this.getProductList(request, productService);
                                 pageDestination = RESULTS_PAGE;
-                            } else {
-                                errorMessage = DEFAULT_ERROR;
-                                request.setAttribute(MSG, errorMessage);
-                                pageDestination = DETAILS_PAGE;
-                            }
+                            
                             break;
                         case DELETE:
-                            currentProductId = request.getParameter(CURRENT_PRODUCT_ID);
-                            recordsUpdated = productService.deleteProductById(currentProductId);
-                            if (recordsUpdated == 0) {
-                                errorMessage = NO_RECORDS;
-                                request.setAttribute(MSG, errorMessage);
-                                pageDestination = DETAILS_PAGE;
-                            } else if (recordsUpdated > 1) {
-                                errorMessage = RECORDS_ERROR;
-                                request.setAttribute(MSG, errorMessage);
-                                this.getProductList(request, productService);
-                                pageDestination = RESULTS_PAGE;
-                            } else if (recordsUpdated == 1) {
-                                msg = RECORD_CONFIRMED;
-                                request.setAttribute(MSG, msg);
+                            currentProductId = request.getParameter(ID);
+                            id = Integer.parseInt(currentProductId);
+                            product = productService.find(id);
+                            productService.remove(product);
+                            
                                 recordsAffectedInSession++;
                                 rc = "" + recordsAffectedInSession;
                                 session.setAttribute(RECORDS, rc);
                                 this.getProductList(request, productService);
                                 pageDestination = RESULTS_PAGE;
-                            } else {
-                                errorMessage = DEFAULT_ERROR;
-                                request.setAttribute(MSG, errorMessage);
-                                pageDestination = DETAILS_PAGE;
-                            }
+                            
                             break;
                         case BACK:
                             this.getProductList(request, productService);
@@ -330,8 +296,8 @@ public class NuglowController extends HttpServlet {
 
     }
 
-    private void getProductList(HttpServletRequest request, ProductService ps) throws DataAccessException {
-        List<Product> products = ps.getProductList();
+    private void getProductList(HttpServletRequest request, AbstractFacade<Product> ps) throws DataAccessException {
+        List<Product> products = ps.findAll();
         request.setAttribute("productList", products);
     }
 
@@ -347,13 +313,7 @@ public class NuglowController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String errorMessage;
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            errorMessage = ex.getMessage();
-            request.setAttribute("msg", errorMessage);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -367,26 +327,7 @@ public class NuglowController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String errorMessage;
-        try {
-            configDbConnection();
-        } catch (Exception ex) {
-            errorMessage = ex.getMessage();
-            request.setAttribute("msg", errorMessage);
-        }
-        try {
-            processRequest(request, response);
-        } catch (Exception ex) {
-            errorMessage = ex.getMessage();
-            request.setAttribute("msg", errorMessage);
-            RequestDispatcher view = getServletContext().getRequestDispatcher(response.encodeURL(RESULTS_PAGE));
-            try {
-                view.forward(request, response);
-            } catch (ServletException | IOException e) {
-                errorMessage = e.getMessage();
-                request.setAttribute("msg", errorMessage);
-            }
-        }
+        processRequest(request, response);
 
     }
 
@@ -400,15 +341,6 @@ public class NuglowController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void configDbConnection() throws NamingException, Exception {
-        if (dbJndiName == null) {
-            productService.getDao().initDao(driverClass, url, userName, password);
-        } else {
-            Context ctx = new InitialContext();
-            DataSource ds = (DataSource) ctx.lookup(dbJndiName);
-            productService.getDao().initDao(ds);
-        }
-    }
 
     /**
      * Called after the constructor is called by the container. This is the
@@ -418,7 +350,7 @@ public class NuglowController extends HttpServlet {
      */
     @Override
     public void init() throws ServletException {
-        dbJndiName = getServletContext().getInitParameter("db.jndi.name");
+        //gets init from web.xml
     }
 
 }

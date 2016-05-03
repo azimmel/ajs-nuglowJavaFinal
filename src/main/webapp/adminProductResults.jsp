@@ -58,10 +58,10 @@
                                     <c:out value="${product.productPrice}"/>
                                 </td>
                                 <td>
-                                    <c:out value="${product.productUrlRef}"/>
+                                    <c:out value="${product.productImage}"/>
                                 </td>
                                 <td>
-                                    <img src="${product.productUrlRef}" style="height: 100px; width: 100px"/>                                    
+                                    <img src="${product.productImage}" style="height: 100px; width: 100px"/>                                    
                                 </td>
                                 <td>
                                     <c:out value="${product.productDescription}"/>
