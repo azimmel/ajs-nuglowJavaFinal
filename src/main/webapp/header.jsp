@@ -19,11 +19,17 @@
         </div>
         <div class="navbar-collapse collapse" id="navbar-main">
             <ul class="nav navbar-nav">
-                <li style="margin-left: -325%">
+                <li>
                     <a href="<%=response.encodeRedirectURL("index.html")%>">Home</a>
                 </li>
-                <li style="margin-left: -280%;">
+                <li>
+                    <a href="<%=response.encodeRedirectURL("Shop?action=list")%>">Shop</a>
+                </li>
+                <li>
                     <a href="<%=response.encodeRedirectURL("admin.jsp")%>">Admin</a>                    
+                </li>
+                <li>
+                    <a href="<%=response.encodeRedirectURL("shop?action=shoppingcart")%>"><span class="badge">${totalItems}</span> Cart</a>
                 </li>
             </ul>
         </div>

@@ -62,7 +62,6 @@ public class NuglowController extends HttpServlet {
     private static final String DESCRIPTION = "description";
     private static final String ID = "productId";
     private static final String PRODUCT = "product";
-    private static final String CURRENT_PRODUCT_ID = "currProductId";
     private static final String DATE = "date";
 
     // db config init params from web.xml

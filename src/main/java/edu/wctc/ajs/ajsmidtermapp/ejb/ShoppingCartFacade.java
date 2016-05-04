@@ -6,6 +6,7 @@
 package edu.wctc.ajs.ajsmidtermapp.ejb;
 
 import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,11 @@ public class ShoppingCartFacade extends AbstractFacade<ShoppingCart> {
 
     public ShoppingCartFacade() {
         super(ShoppingCart.class);
+    }
+    
+    public List<ShoppingCart> findUsersCart(String username){
+        List<ShoppingCart> userCart = em.createNamedQuery("ShoppingCart.findByUser").setParameter("username", username).getResultList();
+        return userCart;
     }
     
 }
