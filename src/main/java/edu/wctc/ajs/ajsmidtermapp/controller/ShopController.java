@@ -9,7 +9,7 @@ import edu.wctc.ajs.ajsmidtermapp.ejb.AbstractFacade;
 import edu.wctc.ajs.ajsmidtermapp.ejb.ShoppingCartFacade;
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
 import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
-import edu.wctc.ajs.ajsmidtermapp.entity.Users;
+import edu.wctc.ajs.ajsmidtermapp.entity.User;
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -58,7 +58,7 @@ public class ShopController extends HttpServlet {
     @Inject
     private AbstractFacade<ShoppingCart> cartService;
     @Inject
-    private AbstractFacade<Users> userService;
+    private AbstractFacade<User> userService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -78,7 +78,7 @@ public class ShopController extends HttpServlet {
         String pageDestination;
         Product product;
         ShoppingCart cart;
-        Users user;
+        User user;
         int cartItems;
         String cartItemsDisplay;
         
@@ -123,7 +123,7 @@ public class ShopController extends HttpServlet {
                     }
                     product = new Product();
                     product = productService.find(id);
-                    user = new Users();
+                    user = new User();
                     user = userService.find(username);
                     cart = new ShoppingCart();
                     cart.setProductId(product);

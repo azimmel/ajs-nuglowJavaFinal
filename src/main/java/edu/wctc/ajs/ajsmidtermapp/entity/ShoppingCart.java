@@ -43,7 +43,7 @@ public class ShoppingCart implements Serializable {
     private Product productId;
     @JoinColumn(name = "username", referencedColumnName = "username")
     @ManyToOne
-    private Users username;
+    private User username;
 
     public ShoppingCart() {
     }
@@ -68,11 +68,11 @@ public class ShoppingCart implements Serializable {
         this.productId = productId;
     }
 
-    public Users getUsername() {
+    public User getUsername() {
         return username;
     }
 
-    public void setUsername(Users username) {
+    public void setUsername(User username) {
         this.username = username;
     }
 

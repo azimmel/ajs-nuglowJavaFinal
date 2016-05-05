@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Users.findByEnabled", query = "SELECT u FROM Users u WHERE u.enabled = :enabled"),
     @NamedQuery(name = "Users.findByLastUpdate", query = "SELECT u FROM Users u WHERE u.lastUpdate = :lastUpdate"),
     @NamedQuery(name = "Users.findByVersion", query = "SELECT u FROM Users u WHERE u.version = :version")})
-public class Users implements Serializable {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,10 +59,10 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "username")
     private Collection<ShoppingCart> shoppingCartCollection;
 
-    public Users() {
+    public User() {
     }
 
-    public Users(String username) {
+    public User(String username) {
         this.username = username;
     }
 
@@ -125,10 +125,10 @@ public class Users implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Users)) {
+        if (!(object instanceof User)) {
             return false;
         }
-        Users other = (Users) object;
+        User other = (User) object;
         if ((this.username == null && other.username != null) || (this.username != null && !this.username.equals(other.username))) {
             return false;
         }
