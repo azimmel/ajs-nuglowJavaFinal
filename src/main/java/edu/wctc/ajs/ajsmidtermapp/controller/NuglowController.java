@@ -1,20 +1,22 @@
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
-import edu.wctc.ajs.ajsmidtermapp.ejb.AbstractFacade;
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
+import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  *
@@ -73,8 +75,7 @@ public class NuglowController extends HttpServlet {
 
     private static int recordsAffectedInSession = 0;
 
-    @Inject
-    private AbstractFacade<Product> productService;
+    private ProductService productService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -148,7 +149,7 @@ public class NuglowController extends HttpServlet {
                     product.setProductPrice(Double.parseDouble(price));
                     product.setProductImage(imgUrl);
                     product.setProductDescription(description);
-                    productService.create(product);
+                    productService.edit(product);
                     recordsAffectedInSession++;
                     String rc = "" + recordsAffectedInSession;
                     session.setAttribute(RECORDS, rc);
@@ -164,7 +165,7 @@ public class NuglowController extends HttpServlet {
                         break;
                     }
                     product = new Product();
-                    product = productService.find(id);
+                    product = productService.findById(prodId);
                     request.setAttribute(PRODUCT, product);
                     pageDestination = DETAILS_PAGE;
                     break;
@@ -211,7 +212,7 @@ public class NuglowController extends HttpServlet {
                         case DELETE:
                             currentProductId = request.getParameter(ID);
                             id = Integer.parseInt(currentProductId);
-                            product = productService.find(id);
+                            product = productService.findById(currentProductId);
                             productService.remove(product);
                             
                                 recordsAffectedInSession++;
@@ -295,7 +296,7 @@ public class NuglowController extends HttpServlet {
 
     }
 
-    private void getProductList(HttpServletRequest request, AbstractFacade<Product> ps) throws DataAccessException {
+    private void getProductList(HttpServletRequest request, ProductService ps) throws DataAccessException {
         List<Product> products = ps.findAll();
         request.setAttribute("productList", products);
     }
@@ -349,7 +350,11 @@ public class NuglowController extends HttpServlet {
      */
     @Override
     public void init() throws ServletException {
-        //gets init from web.xml
+        // Ask Spring for object to inject
+        ServletContext sctx = getServletContext();
+        WebApplicationContext ctx
+                = WebApplicationContextUtils.getWebApplicationContext(sctx);
+        productService = (ProductService) ctx.getBean("productService");
     }
 
 }

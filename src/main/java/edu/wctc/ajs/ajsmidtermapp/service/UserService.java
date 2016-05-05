@@ -55,7 +55,6 @@ public class UserService {
      * Spring performs a transaction with readonly=false. This
      * guarantees a rollback if something goes wrong.
      * @param user
-     * @param item 
      * @return  
      */
     @Transactional

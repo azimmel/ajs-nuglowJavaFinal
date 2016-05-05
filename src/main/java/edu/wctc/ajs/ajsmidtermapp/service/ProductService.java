@@ -48,6 +48,7 @@ public class ProductService {
      * Spring performs a transaction with readonly=false. This
      * guarantees a rollback if something goes wrong.
      * @param product 
+     * @return  
      */
     @Transactional
     public Product edit(Product product) {
