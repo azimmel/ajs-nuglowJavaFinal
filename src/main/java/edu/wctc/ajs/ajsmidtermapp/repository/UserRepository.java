@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Alyson
  */
-public interface UsersRepository extends JpaRepository<User, Integer>, Serializable{
+public interface UserRepository extends JpaRepository<User, Integer>, Serializable{
     
 }
