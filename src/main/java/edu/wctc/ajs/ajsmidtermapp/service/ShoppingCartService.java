@@ -33,6 +33,9 @@ public class ShoppingCartService {
         return shopRepo.findOne(new Integer(id));
     }
 
+    public List<ShoppingCart> findByUser(String username){
+        return shopRepo.findAllWithUsername(username);
+    }
     /**
      * Spring performs a transaction with readonly=false. This
      * guarantees a rollback if something goes wrong.

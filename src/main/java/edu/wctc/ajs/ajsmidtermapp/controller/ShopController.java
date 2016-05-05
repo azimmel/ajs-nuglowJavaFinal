@@ -5,24 +5,27 @@
  */
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
-import edu.wctc.ajs.ajsmidtermapp.ejb.AbstractFacade;
-import edu.wctc.ajs.ajsmidtermapp.ejb.ShoppingCartFacade;
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
 import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
 import edu.wctc.ajs.ajsmidtermapp.entity.User;
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
+import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
+import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
+import edu.wctc.ajs.ajsmidtermapp.service.UserService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  *
@@ -53,12 +56,9 @@ public class ShopController extends HttpServlet {
     private static final String PRODUCT = "product";
     private static final String USER = "username";
 
-    @Inject
-    private AbstractFacade<Product> productService;
-    @Inject
-    private AbstractFacade<ShoppingCart> cartService;
-    @Inject
-    private AbstractFacade<User> userService;
+    private ProductService productService;
+    private ShoppingCartService cartService;
+    private UserService userService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -81,7 +81,6 @@ public class ShopController extends HttpServlet {
         User user;
         int cartItems;
         String cartItemsDisplay;
-        
 
         try {
             try {
@@ -104,7 +103,7 @@ public class ShopController extends HttpServlet {
                         break;
                     }
                     product = new Product();
-                    product = productService.find(id);
+                    product = productService.findById(prodId);
                     request.setAttribute(PRODUCT, product);
                     pageDestination = DETAILS_PAGE;
                     break;
@@ -117,14 +116,14 @@ public class ShopController extends HttpServlet {
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
-                    if(username == null){
+                    if (username == null) {
                         //TESTING
                         username = "testuser@isp.com";
                     }
                     product = new Product();
-                    product = productService.find(id);
+                    product = productService.findById(prodId);
                     user = new User();
-                    user = userService.find(username);
+                    user = userService.findById(username);
                     cart = new ShoppingCart();
                     cart.setProductId(product);
                     cart.setUsername(user);
@@ -132,10 +131,10 @@ public class ShopController extends HttpServlet {
                     cartItems = getCartItemNumber(username);
                     if (cartItems > 0) {
                         cartItemsDisplay = cartItems + "";
-                    }else{
+                    } else {
                         cartItemsDisplay = "";
                     }
-                    request.setAttribute(TOTAL_ITEMS,cartItemsDisplay);
+                    request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
                     pageDestination = RESULTS_PAGE;
                     break;
                 default:
@@ -214,19 +213,36 @@ public class ShopController extends HttpServlet {
 
     }
 
-    private void getProductList(HttpServletRequest request, AbstractFacade<Product> ps) throws DataAccessException {
+    private void getProductList(HttpServletRequest request, ProductService ps) throws DataAccessException {
         List<Product> products = ps.findAll();
         request.setAttribute("productList", products);
     }
 
     private int getCartItemNumber(String username) {
-        ShoppingCartFacade sf = new ShoppingCartFacade();
         int cartItems;
-        List<ShoppingCart> userCart = sf.findUsersCart(username);
+        List<ShoppingCart> userCart = cartService.findByUser(username);
         cartItems = 0;
         for (ShoppingCart s : userCart) {
             cartItems++;
         }
         return cartItems;
+    }
+
+    /**
+     * Called after the constructor is called by the container. This is the
+     * correct place to do one-time initialization.
+     *
+     * @throws ServletException
+     */
+    @Override
+    public void init() throws ServletException {
+        // Ask Spring for object to inject
+        ServletContext sctx = getServletContext();
+        WebApplicationContext ctx
+                = WebApplicationContextUtils.getWebApplicationContext(sctx);
+        productService = (ProductService) ctx.getBean("productService");
+        cartService = (ShoppingCartService) ctx.getBean("shoppingCartService");
+        userService = (UserService) ctx.getBean("userService");
+
     }
 }
