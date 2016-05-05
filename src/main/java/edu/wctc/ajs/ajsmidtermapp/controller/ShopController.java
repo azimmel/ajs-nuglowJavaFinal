@@ -10,7 +10,6 @@ import edu.wctc.ajs.ajsmidtermapp.ejb.ShoppingCartFacade;
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
 import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
 import edu.wctc.ajs.ajsmidtermapp.entity.Users;
-import static edu.wctc.ajs.ajsmidtermapp.entity.Users_.username;
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -117,6 +116,10 @@ public class ShopController extends HttpServlet {
                         request.setAttribute(MSG, DEFAULT_ERROR);
                         pageDestination = RESULTS_PAGE;
                         break;
+                    }
+                    if(username == null){
+                        //TESTING
+                        username = "testuser@isp.com";
                     }
                     product = new Product();
                     product = productService.find(id);

@@ -26,16 +26,20 @@
                 <div class="well col-md-3" style="text-align:center;display: block;margin-left: auto; margin-right: auto;">
                     <div class="col-md-12" style="display: block;margin-left: auto; margin-right: auto;height:200px;width: 200px;"><img src="${product.productImage}" style="display: block;margin-left: auto; margin-right: auto;height:200px;width: 200px;"class="img-responsive productImage"/></div> 
                     <div class="col-md-12">
-                        <form method="POST" action="<%=response.encodeRedirectURL("Shop?action=details")%>">
-                            <input type="submit" class="submitLink" value="${product.productName}" name="submit"/>
-                            <input type="hidden" id="productId" name="productId" value="${product.productId}"/>
-                            <input type="hidden" id="user" name="user" value="${users.username}"
+                        <form method="POST" name="details" id="details" action="<%= response.encodeRedirectURL("Shop?action=details")%>">
+                            <fieldset>
+                                <input type="submit" class="submitLink" value="${product.productName}" name="submit"/>
+                                <input type="hidden" id="productId" name="productId" value="${product.productId}"/>
+                                <input type="hidden" id="user" name="user" value="${users.username}">
+                            </fieldset>
                         </form>
+                            
                     </div>
                     <div class="col-md-12">Category: ${product.productType}</div>
                     <div class="col-md-12">$ ${product.productPrice}</div>
-                    <form method="POST" action="<%=response.encodeRedirectURL("Shop?action=add")%>">
+                    <form method="POST" name="add" id="add" action="<%= response.encodeRedirectURL("Shop?action=add")%>">
                         <input type="submit" value="Add to Cart" name="submit" id="buy"class="buy btn-danger"/>
+                        <input type="hidden" id="productId" name="productId" value="${product.productId}"/>
                     </form> 
                 </div>
             </c:forEach>
