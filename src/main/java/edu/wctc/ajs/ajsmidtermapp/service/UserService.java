@@ -5,9 +5,7 @@
  */
 package edu.wctc.ajs.ajsmidtermapp.service;
 
-import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
 import edu.wctc.ajs.ajsmidtermapp.entity.User;
-import edu.wctc.ajs.ajsmidtermapp.repository.ShoppingCartRepository;
 import edu.wctc.ajs.ajsmidtermapp.repository.UserRepository;
 import java.util.List;
 import javax.inject.Inject;
