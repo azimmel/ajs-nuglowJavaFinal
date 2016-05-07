@@ -29,7 +29,7 @@
                     <a href="<%=response.encodeRedirectURL("admin.jsp")%>">Admin</a>                    
                 </li>
                 <li>
-                    <a href="<%=response.encodeRedirectURL("shop?action=shoppingcart")%>"><span class="badge">${totalItems}</span> Cart</a>
+                    <a href="<%=response.encodeRedirectURL("Shop?action=shoppingcart")%>"><span class="badge">${totalItems}</span> Cart</a>
                 </li>
             </ul>
         </div>

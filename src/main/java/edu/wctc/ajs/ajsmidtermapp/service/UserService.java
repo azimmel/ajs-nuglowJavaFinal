@@ -35,7 +35,8 @@ public class UserService {
     
 
     public User findById(String id) {
-        return (User)userRepo.findOneByUsername(id);
+        User user = (User)userRepo.findOneByUsername(id);
+        return user;
     }
 
     /**

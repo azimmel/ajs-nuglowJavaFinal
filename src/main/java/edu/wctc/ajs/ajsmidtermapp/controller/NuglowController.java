@@ -360,8 +360,7 @@ public class NuglowController extends HttpServlet {
     }
 
     public User getUser(String username) {
-        User user = new User();
-        user = userService.findById(username);
+        User user = userService.findById(username);
         return user;
     }
 
@@ -425,6 +424,8 @@ public class NuglowController extends HttpServlet {
         WebApplicationContext ctx
                 = WebApplicationContextUtils.getWebApplicationContext(sctx);
         productService = (ProductService) ctx.getBean("productService");
+        userService = (UserService) ctx.getBean("userService");
+        cartService = (ShoppingCartService) ctx.getBean("shoppingCartService");
     }
 
 }

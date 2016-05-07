@@ -30,8 +30,10 @@ public class ShoppingCartService {
     }
     
 
-    public ShoppingCart findById(String id) {
-        return shopRepo.findOne(new Integer(id));
+    public ShoppingCart findById(int id) {
+        Integer cartId = id;
+        ShoppingCart cart = shopRepo.findOne(cartId);
+        return cart;
     }
 
     public List<ShoppingCart> findByUser(User username){

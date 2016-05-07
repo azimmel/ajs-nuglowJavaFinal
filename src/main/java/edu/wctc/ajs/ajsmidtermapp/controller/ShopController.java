@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
@@ -14,7 +9,8 @@ import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
 import edu.wctc.ajs.ajsmidtermapp.service.UserService;
 import edu.wctc.ajs.ajsmidtermapp.util.SpringSecurityCurrentUserInformationHandler;
 import java.io.IOException;
-import java.security.Principal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,8 +22,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -48,7 +42,8 @@ public class ShopController extends HttpServlet {
     private static final String LIST = "list";
     private static final String DETAILS = "details";
     private static final String ADD = "add";
-    private static final String DELETE = "Delete";
+    private static final String CART = "shoppingcart";
+    private static final String DELETE = "delete";
     private static final String BACK = "Back";
     private static final String DATE = "date";
     private static final String MSG = "msg";
@@ -79,7 +74,7 @@ public class ShopController extends HttpServlet {
         HttpSession session = request.getSession();
         String action = request.getParameter(ACTION);
         String errorMessage;
-        String pageDestination;
+        String pageDestination = RESULTS_PAGE;
         Product product;
         ShoppingCart cart;
         User user;
@@ -116,9 +111,9 @@ public class ShopController extends HttpServlet {
                 case ADD:
                     prodId = request.getParameter(ID);
                     id = Integer.parseInt(prodId);
-                    try{
-                    username = getUsername();
-                    }catch(Exception e){
+                    try {
+                        username = getUsername();
+                    } catch (Exception e) {
                         request.setAttribute(MSG, e.getCause());
                         this.getProductList(request, productService);
                         pageDestination = RESULTS_PAGE;
@@ -143,6 +138,18 @@ public class ShopController extends HttpServlet {
                     getCart(request);
                     this.getProductList(request, productService);
                     pageDestination = RESULTS_PAGE;
+                    break;
+                case CART:
+                    createShoppingCartPage(request);
+                    pageDestination = SHOPPING_CART;
+                    break;
+                case DELETE:
+                    String cartId = request.getParameter("cartId");
+                    id = Integer.parseInt(cartId);
+                    cart = cartService.findById(id);
+                    cartService.remove(cart);
+                    createShoppingCartPage(request);
+                    pageDestination = SHOPPING_CART;
                     break;
                 default:
                     pageDestination = ERROR_PAGE;
@@ -237,9 +244,9 @@ public class ShopController extends HttpServlet {
 
     private void getCart(HttpServletRequest request) {
         String username = "";
-        try{
+        try {
             username = getUsername();
-        }catch(Exception e){
+        } catch (Exception e) {
             String cartItemsDisplay = "";
             request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
         }
@@ -266,6 +273,28 @@ public class ShopController extends HttpServlet {
         u = new SpringSecurityCurrentUserInformationHandler();
         String username = u.getUsername();//get logged in username
         return username;
+    }
+
+    public void createShoppingCartPage(HttpServletRequest request) {
+        String username = getUsername();
+        User user = getUser(username);
+        List<ShoppingCart> userCart = cartService.findByUser(user);
+        double subtotal = 0;
+        for (ShoppingCart sc : userCart) {
+            subtotal += sc.getProductId().getProductPrice();
+        }
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        String sub = formatter.format(subtotal);
+        double tax = subtotal * .02;
+        String formatTax = formatter.format(tax);
+        double total = subtotal + tax;
+        String formatTotal = formatter.format(total);
+        request.setAttribute("subtotal", sub);
+        request.setAttribute("tax", formatTax);
+        request.setAttribute("total", formatTotal);
+        request.setAttribute("userItems", userCart);
+        getCart(request);
+
     }
 
     /**
