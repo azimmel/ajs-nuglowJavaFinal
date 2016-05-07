@@ -27,7 +27,7 @@
                 <legend>Administration Options</legend>
 
                 <div class='form-group'>
-                    <div class="col-lg-10 col-lg-offset-2">
+                    <div class="col-lg-10" style="margin-left:1.5%;">
                         <input type="submit" name="submit" value="Products List" class="btn btn-default"/>
                     </div>
                 </div>

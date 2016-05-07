@@ -12,7 +12,9 @@ import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
 import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
 import edu.wctc.ajs.ajsmidtermapp.service.UserService;
+import edu.wctc.ajs.ajsmidtermapp.util.SpringSecurityCurrentUserInformationHandler;
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -54,7 +58,7 @@ public class ShopController extends HttpServlet {
 
     private static final String ID = "productId";
     private static final String PRODUCT = "product";
-    private static final String USER = "username";
+    private static final String USER = "user";
 
     private ProductService productService;
     private ShoppingCartService cartService;
@@ -79,8 +83,7 @@ public class ShopController extends HttpServlet {
         Product product;
         ShoppingCart cart;
         User user;
-        int cartItems;
-        String cartItemsDisplay;
+        String username = "";
 
         try {
             try {
@@ -91,10 +94,13 @@ public class ShopController extends HttpServlet {
             }
             switch (action) {
                 case LIST:
+
+                    getCart(request);
                     this.getProductList(request, productService);
                     pageDestination = RESULTS_PAGE;
                     break;
                 case DETAILS:
+                    getCart(request);
                     String prodId = request.getParameter(ID);
                     int id = Integer.parseInt(prodId);
                     if (id == 0) {
@@ -110,9 +116,16 @@ public class ShopController extends HttpServlet {
                 case ADD:
                     prodId = request.getParameter(ID);
                     id = Integer.parseInt(prodId);
-                    String username = request.getParameter(USER);
+                    try{
+                    username = getUsername();
+                    }catch(Exception e){
+                        request.setAttribute(MSG, e.getCause());
+                        this.getProductList(request, productService);
+                        pageDestination = RESULTS_PAGE;
+                    }
                     if (id == 0) {
                         request.setAttribute(MSG, DEFAULT_ERROR);
+                        this.getProductList(request, productService);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
@@ -122,19 +135,13 @@ public class ShopController extends HttpServlet {
                     }
                     product = new Product();
                     product = productService.findById(prodId);
-                    user = new User();
-                    user = userService.findById(username);
+                    user = getUser(username);
                     cart = new ShoppingCart();
                     cart.setProductId(product);
                     cart.setUsername(user);
                     cartService.edit(cart);
-                    cartItems = getCartItemNumber(username);
-                    if (cartItems > 0) {
-                        cartItemsDisplay = cartItems + "";
-                    } else {
-                        cartItemsDisplay = "";
-                    }
-                    request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
+                    getCart(request);
+                    this.getProductList(request, productService);
                     pageDestination = RESULTS_PAGE;
                     break;
                 default:
@@ -218,7 +225,7 @@ public class ShopController extends HttpServlet {
         request.setAttribute("productList", products);
     }
 
-    private int getCartItemNumber(String username) {
+    private int getCartItemNumber(User username) {
         int cartItems;
         List<ShoppingCart> userCart = cartService.findByUser(username);
         cartItems = 0;
@@ -226,6 +233,39 @@ public class ShopController extends HttpServlet {
             cartItems++;
         }
         return cartItems;
+    }
+
+    private void getCart(HttpServletRequest request) {
+        String username = "";
+        try{
+            username = getUsername();
+        }catch(Exception e){
+            String cartItemsDisplay = "";
+            request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
+        }
+        User user = getUser(username);
+        int cartItems;
+        String cartItemsDisplay;
+        cartItems = getCartItemNumber(user);
+        if (cartItems > 0) {
+            cartItemsDisplay = cartItems + "";
+        } else {
+            cartItemsDisplay = "";
+        }
+        request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
+    }
+
+    public User getUser(String username) {
+        User user = new User();
+        user = userService.findById(username);
+        return user;
+    }
+
+    public String getUsername() {
+        SpringSecurityCurrentUserInformationHandler u;
+        u = new SpringSecurityCurrentUserInformationHandler();
+        String username = u.getUsername();//get logged in username
+        return username;
     }
 
     /**

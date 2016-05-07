@@ -2,7 +2,12 @@ package edu.wctc.ajs.ajsmidtermapp.controller;
 
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
+import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
+import edu.wctc.ajs.ajsmidtermapp.entity.User;
 import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
+import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
+import edu.wctc.ajs.ajsmidtermapp.service.UserService;
+import edu.wctc.ajs.ajsmidtermapp.util.SpringSecurityCurrentUserInformationHandler;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +59,7 @@ public class NuglowController extends HttpServlet {
     private static final String NORMAL_BACKGROUND = "";
     private static final String INVALID_INPUT = "Input is invalid, please try again.";
     private static final String IMG_SUBSTRING = "imgs/";
+    private static final String TOTAL_ITEMS = "totalItems";
 
     //attributes
     private static final String MSG = "msg";
@@ -76,6 +82,8 @@ public class NuglowController extends HttpServlet {
     private static int recordsAffectedInSession = 0;
 
     private ProductService productService;
+    private ShoppingCartService cartService;
+    private UserService userService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -103,6 +111,7 @@ public class NuglowController extends HttpServlet {
             switch (action) {
                 case LIST:
                     this.getProductList(request, productService);
+                    getCart(request);
                     pageDestination = RESULTS_PAGE;
                     break;
                 case CREATE:
@@ -110,6 +119,7 @@ public class NuglowController extends HttpServlet {
                     if (newProduct == null || newProduct.length() < 3) {
                         errorMessage = INVALID_INPUT;
                         request.setAttribute(MSG, errorMessage);
+                        getCart(request);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
@@ -117,6 +127,7 @@ public class NuglowController extends HttpServlet {
                     if (type == null || type.length() < 3) {
                         errorMessage = INVALID_INPUT;
                         request.setAttribute(MSG, errorMessage);
+                        getCart(request);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
@@ -125,6 +136,7 @@ public class NuglowController extends HttpServlet {
                     if (price == null || priceTest == 0 || priceTest < 0.01 || priceTest > 10000) {
                         errorMessage = INVALID_INPUT;
                         request.setAttribute(MSG, errorMessage);
+                        getCart(request);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
@@ -133,6 +145,7 @@ public class NuglowController extends HttpServlet {
                     if (imgUrl == null || !imgUrlSubString.equals(IMG_SUBSTRING) || imgUrl.length() < 9) {
                         errorMessage = INVALID_INPUT;
                         request.setAttribute(MSG, errorMessage);
+                        getCart(request);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
@@ -140,6 +153,7 @@ public class NuglowController extends HttpServlet {
                     if (description == null || description.length() < 10) {
                         errorMessage = INVALID_INPUT;
                         request.setAttribute(MSG, errorMessage);
+                        getCart(request);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
@@ -154,6 +168,7 @@ public class NuglowController extends HttpServlet {
                     String rc = "" + recordsAffectedInSession;
                     session.setAttribute(RECORDS, rc);
                     this.getProductList(request, productService);
+                    getCart(request);
                     pageDestination = RESULTS_PAGE;
                     break;
                 case DETAILS:
@@ -161,12 +176,14 @@ public class NuglowController extends HttpServlet {
                     int id = Integer.parseInt(prodId);
                     if (id == 0) {
                         request.setAttribute(MSG, DEFAULT_ERROR);
+                        getCart(request);
                         pageDestination = RESULTS_PAGE;
                         break;
                     }
                     product = new Product();
                     product = productService.findById(prodId);
                     request.setAttribute(PRODUCT, product);
+                    getCart(request);
                     pageDestination = DETAILS_PAGE;
                     break;
                 case EDIT_DELETE:
@@ -189,6 +206,7 @@ public class NuglowController extends HttpServlet {
                                     || newDescription == null || newDescription.length() < 10) {
                                 errorMessage = INVALID_INPUT;
                                 request.setAttribute(MSG, errorMessage);
+                                getCart(request);
                                 pageDestination = DETAILS_PAGE;
                                 break;
                             }
@@ -199,36 +217,40 @@ public class NuglowController extends HttpServlet {
                             product.setProductPrice(Double.parseDouble(newPrice));
                             product.setProductImage(newImgUrl);
                             product.setProductDescription(newDescription);
-                            
+
                             productService.edit(product);
-                            
-                                recordsAffectedInSession++;
-                                rc = "" + recordsAffectedInSession;
-                                session.setAttribute(RECORDS, rc);
-                                this.getProductList(request, productService);
-                                pageDestination = RESULTS_PAGE;
-                            
+
+                            recordsAffectedInSession++;
+                            rc = "" + recordsAffectedInSession;
+                            session.setAttribute(RECORDS, rc);
+                            this.getProductList(request, productService);
+                            getCart(request);
+                            pageDestination = RESULTS_PAGE;
+
                             break;
                         case DELETE:
                             currentProductId = request.getParameter(ID);
                             id = Integer.parseInt(currentProductId);
                             product = productService.findById(currentProductId);
                             productService.remove(product);
-                            
-                                recordsAffectedInSession++;
-                                rc = "" + recordsAffectedInSession;
-                                session.setAttribute(RECORDS, rc);
-                                this.getProductList(request, productService);
-                                pageDestination = RESULTS_PAGE;
-                            
+
+                            recordsAffectedInSession++;
+                            rc = "" + recordsAffectedInSession;
+                            session.setAttribute(RECORDS, rc);
+                            this.getProductList(request, productService);
+                            getCart(request);
+                            pageDestination = RESULTS_PAGE;
+
                             break;
                         case BACK:
                             this.getProductList(request, productService);
+                            getCart(request);
                             pageDestination = RESULTS_PAGE;
                             break;
                         default:
                             errorMessage = DEFAULT_ERROR;
                             request.setAttribute(MSG, errorMessage);
+                            getCart(request);
                             pageDestination = DETAILS_PAGE;
                             break;
                     }
@@ -238,14 +260,17 @@ public class NuglowController extends HttpServlet {
                     switch (subaction) {
                         case UNICORN:
                             session.setAttribute(BACKGROUND_STYLE, UNICORN_BACKGROUND);
+                            getCart(request);
                             pageDestination = ADMIN_PREFERENCES;
                             break;
                         case NORMAL:
                             session.setAttribute(BACKGROUND_STYLE, NORMAL_BACKGROUND);
+                            getCart(request);
                             pageDestination = ADMIN_PREFERENCES;
                             break;
                         default:
                             pageDestination = ADMIN_PREFERENCES;
+                            getCart(request);
                             break;
                     }
                     break;
@@ -253,6 +278,7 @@ public class NuglowController extends HttpServlet {
                     errorMessage = DEFAULT_ERROR;
                     request.setAttribute(MSG, errorMessage);
                     this.getProductList(request, productService);
+                    getCart(request);
                     pageDestination = RESULTS_PAGE;
                     break;
             }
@@ -262,10 +288,12 @@ public class NuglowController extends HttpServlet {
             request.setAttribute(MSG, errorMessage);
             try {
                 this.getProductList(request, productService);
+                getCart(request);
                 pageDestination = RESULTS_PAGE;
             } catch (DataAccessException ex1) {
                 errorMessage = ex1.getMessage();
                 request.setAttribute(MSG, errorMessage);
+                getCart(request);
                 pageDestination = ERROR_PAGE;
             }
         }
@@ -283,7 +311,7 @@ public class NuglowController extends HttpServlet {
             request.setAttribute("msg", errorMessage);
         }
     }
-    
+
     private String getYearDate() {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy");
@@ -299,6 +327,49 @@ public class NuglowController extends HttpServlet {
     private void getProductList(HttpServletRequest request, ProductService ps) throws DataAccessException {
         List<Product> products = ps.findAll();
         request.setAttribute("productList", products);
+    }
+
+    private int getCartItemNumber(User username) {
+        int cartItems;
+        List<ShoppingCart> userCart = cartService.findByUser(username);
+        cartItems = 0;
+        for (ShoppingCart s : userCart) {
+            cartItems++;
+        }
+        return cartItems;
+    }
+
+    private void getCart(HttpServletRequest request) {
+        String username = "";
+        try{
+            username = getUsername();
+        }catch(Exception e){
+            String cartItemsDisplay = "";
+            request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
+        }
+        User user = getUser(username);
+        int cartItems;
+        String cartItemsDisplay;
+        cartItems = getCartItemNumber(user);
+        if (cartItems > 0) {
+            cartItemsDisplay = cartItems + "";
+        } else {
+            cartItemsDisplay = "";
+        }
+        request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
+    }
+
+    public User getUser(String username) {
+        User user = new User();
+        user = userService.findById(username);
+        return user;
+    }
+
+    public String getUsername() {
+        SpringSecurityCurrentUserInformationHandler u;
+        u = new SpringSecurityCurrentUserInformationHandler();
+        String username = u.getUsername();//get logged in username
+        return username;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -340,7 +411,6 @@ public class NuglowController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 
     /**
      * Called after the constructor is called by the container. This is the

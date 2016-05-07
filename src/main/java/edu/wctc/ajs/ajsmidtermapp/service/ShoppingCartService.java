@@ -1,6 +1,7 @@
 package edu.wctc.ajs.ajsmidtermapp.service;
 
 import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
+import edu.wctc.ajs.ajsmidtermapp.entity.User;
 import edu.wctc.ajs.ajsmidtermapp.repository.ShoppingCartRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -33,7 +34,7 @@ public class ShoppingCartService {
         return shopRepo.findOne(new Integer(id));
     }
 
-    public List<ShoppingCart> findByUser(String username){
+    public List<ShoppingCart> findByUser(User username){
         return shopRepo.findAllWithUsername(username);
     }
     /**

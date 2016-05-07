@@ -31,7 +31,6 @@
                             <fieldset>
                                 <input type="submit" class="submitLink" value="${product.productName}" name="submit"/>
                                 <input type="hidden" id="productId" name="productId" value="${product.productId}"/>
-                                <input type="hidden" id="user" name="user" value="${users.username}">
                             </fieldset>
                         </form>
                             
