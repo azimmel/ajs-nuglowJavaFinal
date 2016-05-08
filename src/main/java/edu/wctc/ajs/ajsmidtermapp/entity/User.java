@@ -49,8 +49,8 @@ public class User implements Serializable {
     private Date lastUpdate;
     @Column(name = "version")
     private Integer version;
-    @OneToMany(mappedBy = "username")
-    private Collection<ShoppingCart> shoppingCartCollection;
+//    @OneToMany(mappedBy = "username")
+//    private Collection<ShoppingCart> shoppingCartCollection;
 
     public User() {
     }
@@ -99,14 +99,14 @@ public class User implements Serializable {
         this.version = version;
     }
 
-    @XmlTransient
-    public Collection<ShoppingCart> getShoppingCartCollection() {
-        return shoppingCartCollection;
-    }
-
-    public void setShoppingCartCollection(Collection<ShoppingCart> shoppingCartCollection) {
-        this.shoppingCartCollection = shoppingCartCollection;
-    }
+//    @XmlTransient
+//    public Collection<ShoppingCart> getShoppingCartCollection() {
+//        return shoppingCartCollection;
+//    }
+//
+//    public void setShoppingCartCollection(Collection<ShoppingCart> shoppingCartCollection) {
+//        this.shoppingCartCollection = shoppingCartCollection;
+//    }
 
     @Override
     public int hashCode() {

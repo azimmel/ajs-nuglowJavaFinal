@@ -1,9 +1,11 @@
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
+import edu.wctc.ajs.ajsmidtermapp.entity.Order;
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
 import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
 import edu.wctc.ajs.ajsmidtermapp.entity.User;
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
+import edu.wctc.ajs.ajsmidtermapp.service.OrderService;
 import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
 import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
 import edu.wctc.ajs.ajsmidtermapp.service.UserService;
@@ -13,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -36,6 +39,9 @@ public class ShopController extends HttpServlet {
     private static final String DETAILS_PAGE = "/productDescription.jsp";
     private static final String ERROR_PAGE = "/errorPage.jsp";
     private static final String SHOPPING_CART = "/shoppingCart.jsp";
+    private static final String CHECKOUT_PAGE = "/checkout.jsp";
+    private static final String LOGIN = "/login.jsp";
+    private static final String ORDER_PROCESSED_PAGE = "/orderConfirmationPage.jsp";
     private static final String ERR = "data cannot be found";
     private static final String SUBMIT = "submit";
     private static final String ACTION = "action";
@@ -43,6 +49,8 @@ public class ShopController extends HttpServlet {
     private static final String DETAILS = "details";
     private static final String ADD = "add";
     private static final String CART = "shoppingcart";
+    private static final String CHECKOUT = "checkout";
+    private static final String PAY = "pay";
     private static final String DELETE = "delete";
     private static final String BACK = "Back";
     private static final String DATE = "date";
@@ -52,12 +60,41 @@ public class ShopController extends HttpServlet {
     private static final String DEFAULT_ERROR = "Error: Huston we have a problem. Something has gone terribly wrong.";
 
     private static final String ID = "productId";
+    private static final String CART_ID = "cartId";
     private static final String PRODUCT = "product";
     private static final String USER = "user";
+    private static final String PRODUCT_LIST = "productList";
+    private static final String SUBTOTAL = "subtotal";
+    private static final String TAX = "tax";
+    private static final String TOTAL = "total";
+    private static final String USER_ITEMS = "userItems";
+    private static final String CURRENCY = "#0.00";
+    private static final String CHECKBOX = "checkbox";
+    private static final String FIRST_NAME = "firstName";
+    private static final String BILLING_FIRST_NAME = "bFirstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String BILLING_LAST_NAME = "bLastName";
+    private static final String ADDRESS1 = "address1";
+    private static final String BILLING_ADDRESS1 = "bAddress1";
+    private static final String ADDRESS2 = "address2";
+    private static final String BILLING_ADDRESS2 = "bAddress2";
+    private static final String CITY = "city";
+    private static final String BILLING_CITY = "bCity";
+    private static final String STATE = "state";
+    private static final String BILLING_STATE = "bState";
+    private static final String ZIP = "zip";
+    private static final String BILLING_ZIP = "bZip";
+    private static final String CARD_NUMBER = "cardNumber";
+    private static final String CARD_NAME = "cardName";
+    private static final String EXP_MONTH = "expMonth";
+    private static final String EXP_YEAR = "expYear";
+    private static final String CVV = "cvv";
+    private static final String NAME = "name";
 
     private ProductService productService;
     private ShoppingCartService cartService;
     private UserService userService;
+    private OrderService orderService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -85,7 +122,7 @@ public class ShopController extends HttpServlet {
                 request.setAttribute(DATE, getYearDate());
             } catch (Exception ex) {
                 errorMessage = ex.getMessage();
-                request.setAttribute("msg", errorMessage);
+                request.setAttribute(MSG, errorMessage);
             }
             switch (action) {
                 case LIST:
@@ -125,8 +162,8 @@ public class ShopController extends HttpServlet {
                         break;
                     }
                     if (username == null) {
-                        //TESTING
-                        username = "testuser@isp.com";
+                        pageDestination = LOGIN;
+                        break;
                     }
                     product = new Product();
                     product = productService.findById(prodId);
@@ -144,15 +181,130 @@ public class ShopController extends HttpServlet {
                     pageDestination = SHOPPING_CART;
                     break;
                 case DELETE:
-                    String cartId = request.getParameter("cartId");
+                    String cartId = request.getParameter(CART_ID);
                     id = Integer.parseInt(cartId);
                     cart = cartService.findById(id);
                     cartService.remove(cart);
                     createShoppingCartPage(request);
                     pageDestination = SHOPPING_CART;
                     break;
+                case CHECKOUT:
+                    createShoppingCartPage(request);
+                    pageDestination = CHECKOUT_PAGE;
+                    break;
+                case PAY:
+                    try {
+                        username = getUsername();
+                    } catch (Exception e) {
+                        pageDestination = LOGIN;
+                    }
+                    String billingCheck = request.getParameter(CHECKBOX);
+                    String name = "";
+                    if ("0".equals(billingCheck)) {
+                        //billing is the same as shipping
+                        //order date
+                        Order order = new Order();
+                        order.setOrderDate(new Date());
+                        //user
+                        username = getUsername();
+                        user = getUser(username);
+                        order.setUsername(username);
+                        //shipping address
+                        String firstName = request.getParameter(FIRST_NAME);
+                        String lastName = request.getParameter(LAST_NAME);
+                        String address1 = request.getParameter(ADDRESS1);
+                        String address2 = request.getParameter(ADDRESS2);
+                        String city = request.getParameter(CITY);
+                        String state = request.getParameter(STATE);
+                        String zip = request.getParameter(ZIP);
+                        String shippingAddress = firstName + " " + lastName + ", "
+                                + address1 + " " + address2 + ", " + city
+                                + " " + state + ", " + zip;
+                        order.setShippingAddress(shippingAddress);
+                        //users cart
+                        List<ShoppingCart> userCart = cartService.findByUser(user);
+                        String items = "";
+                        for (ShoppingCart s : userCart) {
+                            items += (":" + s.getProductId() + ":");
+                        }
+                        order.setItemsOrdered(items);
+                        //subtotal
+                        double subtotal = 0;
+                        for (ShoppingCart sc : userCart) {
+                            subtotal += sc.getProductId().getProductPrice();
+                        }
+                        order.setSubtotal(subtotal);
+                        //total
+                        double tax = subtotal * .02;
+                        double total = subtotal + tax;
+                        order.setTotal(total);
+                        //billing address
+                        order.setBillingAddress(shippingAddress);
+                        //add to database
+                        orderService.edit(order);
+                        deleteAllCartItems();
+                        name = firstName + " " + lastName;
+                    } else {
+                        //billing is different than shipping
+                        //order date
+                        Order order = new Order();
+                        order.setOrderDate(new Date());
+                        //user
+                        username = getUsername();
+                        user = getUser(username);
+                        order.setUsername(username);
+                        //shipping address
+                        String firstName = request.getParameter(FIRST_NAME);
+                        String lastName = request.getParameter(LAST_NAME);
+                        String address1 = request.getParameter(ADDRESS1);
+                        String address2 = request.getParameter(ADDRESS2);
+                        String city = request.getParameter(CITY);
+                        String state = request.getParameter(STATE);
+                        String zip = request.getParameter(ZIP);
+                        String shippingAddress = firstName + " " + lastName + ", "
+                                + address1 + " " + address2 + ", " + city
+                                + " " + state + ", " + zip;
+                        order.setShippingAddress(shippingAddress);
+                        //users cart
+                        List<ShoppingCart> userCart = cartService.findByUser(user);
+                        String items = "";
+                        for (ShoppingCart s : userCart) {
+                            items += (":" + s.getProductId() + ":");
+                        }
+                        order.setItemsOrdered(items);
+                        //subtotal
+                        double subtotal = 0;
+                        for (ShoppingCart sc : userCart) {
+                            subtotal += sc.getProductId().getProductPrice();
+                        }
+                        order.setSubtotal(subtotal);
+                        //total
+                        double tax = subtotal * .02;
+                        double total = subtotal + tax;
+                        order.setTotal(total);
+                        //billing address
+                        firstName = request.getParameter(BILLING_FIRST_NAME);
+                        lastName = request.getParameter(BILLING_LAST_NAME);
+                        address1 = request.getParameter(BILLING_ADDRESS1);
+                        address2 = request.getParameter(BILLING_ADDRESS2);
+                        city = request.getParameter(BILLING_CITY);
+                        state = request.getParameter(BILLING_STATE);
+                        zip = request.getParameter(BILLING_ZIP);
+                        String billingAddress = firstName + " " + lastName + ", "
+                                + address1 + " " + address2 + ", " + city
+                                + " " + state + ", " + zip;
+                        order.setBillingAddress(billingAddress);
+                        deleteAllCartItems();
+                        name = firstName + " " + lastName;
+                    }
+                    
+                    request.setAttribute(NAME, name);
+                    createShoppingCartPage(request);
+                    pageDestination = ORDER_PROCESSED_PAGE;
+                    break;
                 default:
                     pageDestination = ERROR_PAGE;
+                    break;
             }
         } catch (DataAccessException ex) {
             errorMessage = ex.getMessage();
@@ -171,7 +323,7 @@ public class ShopController extends HttpServlet {
             view.forward(request, response);
         } catch (ServletException | IOException ex) {
             errorMessage = ex.getMessage();
-            request.setAttribute("msg", errorMessage);
+            request.setAttribute(MSG, errorMessage);
         }
 
     }
@@ -229,7 +381,7 @@ public class ShopController extends HttpServlet {
 
     private void getProductList(HttpServletRequest request, ProductService ps) throws DataAccessException {
         List<Product> products = ps.findAll();
-        request.setAttribute("productList", products);
+        request.setAttribute(PRODUCT_LIST, products);
     }
 
     private int getCartItemNumber(User username) {
@@ -262,6 +414,15 @@ public class ShopController extends HttpServlet {
         request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
     }
 
+    private void deleteAllCartItems() {
+        String username = getUsername();
+        User user = getUser(username);
+        List<ShoppingCart> userCart = cartService.findByUser(user);
+        for(ShoppingCart s : userCart){
+            cartService.remove(s);
+        }
+    }
+
     public User getUser(String username) {
         User user = new User();
         user = userService.findById(username);
@@ -283,16 +444,16 @@ public class ShopController extends HttpServlet {
         for (ShoppingCart sc : userCart) {
             subtotal += sc.getProductId().getProductPrice();
         }
-        NumberFormat formatter = new DecimalFormat("#0.00");
+        NumberFormat formatter = new DecimalFormat(CURRENCY);
         String sub = formatter.format(subtotal);
         double tax = subtotal * .02;
         String formatTax = formatter.format(tax);
         double total = subtotal + tax;
         String formatTotal = formatter.format(total);
-        request.setAttribute("subtotal", sub);
-        request.setAttribute("tax", formatTax);
-        request.setAttribute("total", formatTotal);
-        request.setAttribute("userItems", userCart);
+        request.setAttribute(SUBTOTAL, sub);
+        request.setAttribute(TAX, formatTax);
+        request.setAttribute(TOTAL, formatTotal);
+        request.setAttribute(USER_ITEMS, userCart);
         getCart(request);
 
     }
@@ -312,6 +473,6 @@ public class ShopController extends HttpServlet {
         productService = (ProductService) ctx.getBean("productService");
         cartService = (ShoppingCartService) ctx.getBean("shoppingCartService");
         userService = (UserService) ctx.getBean("userService");
-
+        orderService = (OrderService) ctx.getBean("orderService");
     }
 }

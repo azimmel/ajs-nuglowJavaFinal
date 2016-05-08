@@ -37,6 +37,7 @@ public class ShoppingCartService {
     }
 
     public List<ShoppingCart> findByUser(User username){
+        
         return shopRepo.findAllWithUsername(username);
     }
     /**

@@ -7,8 +7,10 @@ package edu.wctc.ajs.ajsmidtermapp.entity;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -39,10 +42,10 @@ public class ShoppingCart implements Serializable {
     @Column(name = "cart_id")
     private Integer cartId;
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     private Product productId;
     @JoinColumn(name = "username", referencedColumnName = "username")
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     private User username;
 
     public ShoppingCart() {
