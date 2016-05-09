@@ -33,6 +33,13 @@
                 </div>
             </fieldset>
         </form>
+        <form method="POST" name="reports" class="form-horizontal" action="<%= response.encodeRedirectURL("Nuglow?action=orderReports")%>">
+            <div class='form-group'>
+                    <div class="col-lg-10" style="margin-left:1.5%;">
+                        <input type="submit" name="submit" value="Order Reports" class="btn btn-default"/>
+                    </div>
+            </div>
+        </form>
         <div class='form-group'>
             <div class="col-lg-10 col-lg-offset-2">
                 <button class="btn btn-default"><a href="<%= response.encodeURL("adminPreferences.jsp")%>">Administration Preferences</a></button>

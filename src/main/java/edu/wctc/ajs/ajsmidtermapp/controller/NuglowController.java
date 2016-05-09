@@ -1,17 +1,26 @@
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
+import edu.wctc.ajs.ajsmidtermapp.entity.Order;
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import edu.wctc.ajs.ajsmidtermapp.entity.Product;
 import edu.wctc.ajs.ajsmidtermapp.entity.ShoppingCart;
 import edu.wctc.ajs.ajsmidtermapp.entity.User;
+import edu.wctc.ajs.ajsmidtermapp.service.OrderService;
 import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
 import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
 import edu.wctc.ajs.ajsmidtermapp.service.UserService;
 import edu.wctc.ajs.ajsmidtermapp.util.SpringSecurityCurrentUserInformationHandler;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -34,6 +43,7 @@ public class NuglowController extends HttpServlet {
     private static final String DETAILS_PAGE = "/adminProductDetail.jsp";
     private static final String ERROR_PAGE = "/errorPage.jsp";
     private static final String ADMIN_PREFERENCES = "/adminPreferences.jsp";
+    private static final String ORDER_REPORTS = "/orderReports.jsp";
     private static final String ERR = "data cannot be found";
     private static final String SUBMIT = "submit";
     private static final String ACTION = "action";
@@ -48,6 +58,9 @@ public class NuglowController extends HttpServlet {
     private static final String UNICORN = "Change to Unicorn";
     private static final String NORMAL = "Change to SpaceLab";
     private static final String BACKGROUND_STYLE = "background";
+    private static final String REPORTS = "orderReports";
+    private static final String USERS_ORDERS = "userReport";
+    private static final String TIME_FRAME = "userTimeFrame";
     private static final String RECORDS = "recordsAffected";
 
     //Error Messages
@@ -71,6 +84,14 @@ public class NuglowController extends HttpServlet {
     private static final String ID = "productId";
     private static final String PRODUCT = "product";
     private static final String DATE = "date";
+    private static final String USERS = "users";
+    private static final String USER_ORDERS = "userOrders";
+    private static final String START_YEAR = "startYear";
+    private static final String START_MONTH = "startMonth";
+    private static final String START_DAY = "startDay";
+    private static final String END_YEAR = "endYear";
+    private static final String END_MONTH = "endMonth";
+    private static final String END_DAY = "endDay";
 
     // db config init params from web.xml
     private String driverClass;
@@ -84,6 +105,7 @@ public class NuglowController extends HttpServlet {
     private ProductService productService;
     private ShoppingCartService cartService;
     private UserService userService;
+    private OrderService orderService;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -92,7 +114,7 @@ public class NuglowController extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ParseException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         String action = request.getParameter(ACTION);
@@ -274,6 +296,37 @@ public class NuglowController extends HttpServlet {
                             break;
                     }
                     break;
+                case REPORTS:
+                    getUsersInOrderTable(request);
+                    pageDestination = ORDER_REPORTS;
+                    break;
+                case USERS_ORDERS:
+                    //get selected username 
+                    String username = request.getParameter(USERS);
+                    List<Order> order = orderService.findByUser(username);
+                    request.setAttribute(USER_ORDERS, order);
+                    getUsersInOrderTable(request);
+                    getCart(request);
+                    pageDestination = ORDER_REPORTS;
+                    break;
+                case TIME_FRAME:
+                    String sYear = request.getParameter(START_YEAR);
+                    String sMonth = request.getParameter(START_MONTH);
+                    String sDay = request.getParameter(START_DAY);
+                    String eYear = request.getParameter(END_YEAR);
+                    String eMonth = request.getParameter(END_MONTH);
+                    String eDay = request.getParameter(END_DAY);
+                    String startDate = sYear + "-" + sMonth + "-" + sDay + " 23:59:59";
+                    String endDate = eYear + "-" + eMonth + "-" + eDay + " 23:59:59";
+                    SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date sDate = myFormat.parse(startDate);
+                    Date eDate = myFormat.parse(endDate);
+                    order = orderService.findAllBetweenDates(sDate, eDate);
+                    request.setAttribute(USER_ORDERS, order);
+                    getUsersInOrderTable(request);
+                    getCart(request);
+                    pageDestination = ORDER_REPORTS;
+                    break;
                 default:
                     errorMessage = DEFAULT_ERROR;
                     request.setAttribute(MSG, errorMessage);
@@ -339,11 +392,29 @@ public class NuglowController extends HttpServlet {
         return cartItems;
     }
 
+    private void getUsersInOrderTable(HttpServletRequest request){
+        List<Order> order = orderService.findAll();
+                    List<String> users = new ArrayList<>();
+                    boolean flag = false;
+                    for (Order o : order) {
+                        String user = o.getUsername();
+                        if (users.isEmpty()) {
+                            users.add(user);
+                        } else {
+                             if(users.contains(user)){
+                                 //do nothing
+                             }else{
+                                 users.add(user);
+                             }
+                        }
+                    }
+                    request.setAttribute(USERS, users);
+    }
     private void getCart(HttpServletRequest request) {
         String username = "";
-        try{
+        try {
             username = getUsername();
-        }catch(Exception e){
+        } catch (Exception e) {
             String cartItemsDisplay = "";
             request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
         }
@@ -383,7 +454,11 @@ public class NuglowController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(NuglowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -397,7 +472,11 @@ public class NuglowController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (ParseException ex) {
+            Logger.getLogger(NuglowController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -426,6 +505,7 @@ public class NuglowController extends HttpServlet {
         productService = (ProductService) ctx.getBean("productService");
         userService = (UserService) ctx.getBean("userService");
         cartService = (ShoppingCartService) ctx.getBean("shoppingCartService");
+        orderService = (OrderService) ctx.getBean("orderService");
     }
 
 }

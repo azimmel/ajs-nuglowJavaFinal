@@ -2,6 +2,7 @@ package edu.wctc.ajs.ajsmidtermapp.service;
 
 import edu.wctc.ajs.ajsmidtermapp.entity.Order;
 import edu.wctc.ajs.ajsmidtermapp.repository.OrderRepository;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -33,6 +34,14 @@ public class OrderService {
         return orderRepo.findOne(new Integer(id));
     }
 
+    public List<Order> findByUser(String username){
+        
+        return orderRepo.findAllWithUsername(username);
+    }
+    
+    public List findAllBetweenDates(Date startDate, Date endDate){
+        return orderRepo.findAllBetweenDates(startDate, endDate);
+    }
     /**
      * Spring performs a transaction with readonly=false. This
      * guarantees a rollback if something goes wrong.
