@@ -25,10 +25,10 @@
           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 ">
     <!--email-->
-    <context:property-placeholder location="classpath:edu.wctc.ajs.ajsmidtermapp.properties"/>
+    <context:property-placeholder location="classpath*:ajsmidtermapp/*.properties"/>
     <!-- Scans within the base package of the application for Spring annotations to configure as beans -->
     <context:component-scan base-package="edu.wctc.ajs.ajsmidtermapp">
-        <context:exclude-filter type="regex" expression="edu\.wctc\.ajd\.ajsmidtermapp\.repository.*" />
+        <context:exclude-filter type="regex" expression="edu\.wctc\.ajs\.ajsmidtermapp\.repository.*" />
     </context:component-scan>
     <context:annotation-config/>
     
@@ -57,7 +57,8 @@
 
         <sec:intercept-url pattern="/login.jsp" 
                            access="isAnonymous()" requires-channel="https"/>
-        
+        <sec:intercept-url pattern="/index.html" 
+                           access="isAnonymous()" requires-channel="https"/>
         <sec:intercept-url pattern="/loginerror.jsp" 
                            access="isAnonymous()" requires-channel="https"/>
 
@@ -125,11 +126,11 @@
             </bean>
         </property>
     </bean>
-        <!-- *********EMAIL SENDER STUFF********** -->
+        <!-- *********EMAIL SENDER STUFF** did no work ~~>${mail.username} ${mail.password}******** -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="mail.azimmelportfolio.com"/>
-        <property name="username" value="${mail.username}"/>
-        <property name="password" value="${mail.password}"/>
+        <property name="username" value="azimmel@azimmelportfolio.com"/>
+        <property name="password" value="bubbless2"/>
         <property name="port" value="25"/>
         <property name="javaMailProperties">
             <props>
@@ -146,12 +147,11 @@
     <!-- this is a template message that we can pre-load with default state -->
     <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
         <!-- if using Gmail, the from must be the address of the account holder -->
-        <property name="from" value="${mail.username}"/>
+        <property name="from" value="azimmel@azimmelportfolio.com"/>
 	<!-- replace the value text with your own -->
         <property name="subject" value="Web App Registration - One More Step Required"/>
     </bean>
     <!-- ********* /EMAIL SENDER STUFF ************* -->
-</beans>
 
     <!-- Spring managed transactions -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

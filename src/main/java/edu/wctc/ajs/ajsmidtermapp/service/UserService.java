@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional(readOnly = true)
 public class UserService {
-    private transient final Logger LOG = LoggerFactory.getLogger(ProductService.class);
+
+    private transient final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     @Inject
     private UserRepository userRepo;
@@ -32,17 +34,21 @@ public class UserService {
     public List<User> findAll() {
         return userRepo.findAll();
     }
-    
 
     public User findById(String id) {
-        User user = (User)userRepo.findOneByUsername(id);
+        User user = (User) userRepo.findOneByUsername(id);
         return user;
     }
 
+    public User findOneByUsername(String username) {
+        return (User) userRepo.findOneByUsername(username);
+    }
+
     /**
-     * Spring performs a transaction with readonly=false. This
-     * guarantees a rollback if something goes wrong.
-     * @param user 
+     * Spring performs a transaction with readonly=false. This guarantees a
+     * rollback if something goes wrong.
+     *
+     * @param user
      */
     @Transactional
     public void remove(User user) {
@@ -51,10 +57,11 @@ public class UserService {
     }
 
     /**
-     * Spring performs a transaction with readonly=false. This
-     * guarantees a rollback if something goes wrong.
+     * Spring performs a transaction with readonly=false. This guarantees a
+     * rollback if something goes wrong.
+     *
      * @param user
-     * @return  
+     * @return
      */
     @Transactional
     public User edit(User user) {
