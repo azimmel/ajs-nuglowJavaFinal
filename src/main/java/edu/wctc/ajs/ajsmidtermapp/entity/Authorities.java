@@ -1,11 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.wctc.ajs.ajsmidtermapp.entity;
 
+import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,34 +43,94 @@ public class Authorities implements Serializable {
     @Column(name = "authority")
     private String authority;
 
+    /**
+     * Empty Constructor.
+     */
     public Authorities() {
     }
 
+    /**
+     * Constructor that passes in the authorities id.
+     * @param authoritiesId the id of the authorities record.
+     */
     public Authorities(Integer authoritiesId) {
+        if(authoritiesId == null || authoritiesId == 0){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.authoritiesId = authoritiesId;
     }
 
+    /**
+     * Gets the id for the authorities record.
+     * @return the id.
+     */
     public Integer getAuthoritiesId() {
         return authoritiesId;
     }
 
+    /**
+     * Sets the id for the authorities record.
+     * @param authoritiesId The id.
+     */
     public void setAuthoritiesId(Integer authoritiesId) {
+        if(authoritiesId == null || authoritiesId == 0){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.authoritiesId = authoritiesId;
     }
 
+    /**
+     * Gets the username of the user.
+     * @return The users username.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets the username that the role is assigned to.
+     * @param username The users username.
+     */
     public void setUsername(String username) {
+        if(username.isEmpty()){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.username = username;
     }
 
+    /**
+     * Gets the authority for the user.
+     * @return the role for the user.
+     */
     public String getAuthority() {
         return authority;
     }
 
+    /**
+     * Set the authority for the user.
+     * This is the roll for the username. Ex: 'ROLE_MGR' or 'ROLE_USER'
+     * @param authority roll for the username.
+     */
     public void setAuthority(String authority) {
+        if(authority.isEmpty()){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.authority = authority;
     }
 

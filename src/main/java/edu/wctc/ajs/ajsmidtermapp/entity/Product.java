@@ -1,12 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.wctc.ajs.ajsmidtermapp.entity;
 
+import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,8 +21,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
+ * Class for Product objects
  * @author Alyson
+ * @version 1.1
  */
 @Entity
 @Table(name = "product")
@@ -69,65 +68,183 @@ public class Product implements Serializable {
     @Column(name = "product_description")
     private String productDescription;
 
+    /**
+     * Empty Constructor
+     */
     public Product() {
     }
 
+    /**
+     * Constructor passing productId
+     * @param productId Product's Id number.
+     */
     public Product(Integer productId) {
+        if(productId == null || productId == 0){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productId = productId;
     }
 
+    /**
+     * Constructor passing in a productId, name, type and price.
+     * @param productId Id of the product
+     * @param productName Name of the product
+     * @param productType Category type of the product
+     * @param productPrice Price of the product
+     */
     public Product(Integer productId, String productName, String productType, double productPrice) {
+        if(productId == null || productId == 0 || productName.isEmpty() || productType.isEmpty() || productPrice == 0){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productId = productId;
         this.productName = productName;
         this.productType = productType;
         this.productPrice = productPrice;
     }
 
+    /**
+     * Gets the products Id.
+     * @return The products Id.
+     */
     public Integer getProductId() {
         return productId;
     }
 
+    /**
+     * Sets the products Id.
+     * @param productId products Id number.
+     */
     public void setProductId(Integer productId) {
+        if(productId == null || productId == 0){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productId = productId;
     }
 
+    /**
+     * Gets the product Id.
+     * @return the products Id number.
+     */
     public String getProductName() {
         return productName;
     }
 
+    /**
+     * Sets the products name.
+     * @param productName the products name.
+     */
     public void setProductName(String productName) {
+        if(productName.isEmpty()){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productName = productName;
     }
 
+    /**
+     * Gets the products Type/category.
+     * @return the products category/type.
+     */
     public String getProductType() {
         return productType;
     }
 
+    /**
+     * Sets the products type/category.
+     * @param productType the products type/category
+     */
     public void setProductType(String productType) {
+        if(productType.isEmpty()){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productType = productType;
     }
 
+    /**
+     * Gets the products price.
+     * @return the products price.
+     */
     public double getProductPrice() {
         return productPrice;
     }
 
+    /**
+     * Sets the products price.
+     * @param productPrice products price.
+     */
     public void setProductPrice(double productPrice) {
+        if(productPrice == 0){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productPrice = productPrice;
     }
 
+    /**
+     * Gets the products Image URL.
+     * @return the products image url.
+     */
     public String getProductImage() {
         return productImage;
     }
 
+    /**
+     * Sets the products Image URL.
+     * @param productImage the products image url.
+     */
     public void setProductImage(String productImage) {
+        if(productImage.isEmpty()){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productImage = productImage;
     }
 
+    /**
+     * Gets the products description.
+     * @return the products description.
+     */
     public String getProductDescription() {
         return productDescription;
     }
 
+    /**
+     * Sets the products description.
+     * @param productDescription the products description.
+     */
     public void setProductDescription(String productDescription) {
+        if(productDescription.isEmpty()){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.productDescription = productDescription;
     }
 
