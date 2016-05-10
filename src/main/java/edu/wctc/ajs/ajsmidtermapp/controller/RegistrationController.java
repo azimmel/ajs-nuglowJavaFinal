@@ -7,6 +7,7 @@ package edu.wctc.ajs.ajsmidtermapp.controller;
 
 import edu.wctc.ajs.ajsmidtermapp.entity.Authorities;
 import edu.wctc.ajs.ajsmidtermapp.entity.User;
+import edu.wctc.ajs.ajsmidtermapp.service.AuthoritiesService;
 import edu.wctc.ajs.ajsmidtermapp.service.EmailService;
 import edu.wctc.ajs.ajsmidtermapp.service.OrderService;
 import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
@@ -14,8 +15,12 @@ import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
 import edu.wctc.ajs.ajsmidtermapp.service.UserService;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,8 +39,25 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 @WebServlet(name = "RegistrationController", urlPatterns = {"/Register"})
 public class RegistrationController extends HttpServlet {
 
+    public static final String REGISTER = "register";
+    public static final String ACTION = "action";
+    public static final String LOGIN = "/login.jsp";
+    public static final String REGISTRATION_PAGE = "/registration.jsp";
+    private static final String MSG = "msg";
+    public static final String ROLE_USER = "ROLE_USER";
+
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+
+    public static final String EMAIL_ERROR_MSG = "Sorry, the verification email could not be "
+            + "sent. Please notify the webmaster at "
+            + "webmaster@gmail.com and we'll complete the "
+            + "process for you. Thanks for your patience.";
+
     private UserService userService;
+    private AuthoritiesService authService;
     private EmailService emailService;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,12 +70,42 @@ public class RegistrationController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            
-            
+        String action = request.getParameter(ACTION);
+        String pageDestination = REGISTRATION_PAGE;
+        String errorMessage;
+        try {
+            switch (action) {
+                case REGISTER:
+                    String username = request.getParameter(USERNAME);
+                    String password = request.getParameter(PASSWORD);
+                    try {
+                        saveNewRegistration(username, password);
+                    } catch (Exception e) {
+                        pageDestination = REGISTRATION_PAGE;
+                    }
+                    pageDestination = LOGIN;
+
+                    break;
+                default:
+                    pageDestination = REGISTRATION_PAGE;
+                    break;
+            }
+        } catch (Exception e) {
+            errorMessage = e.getMessage();
+            request.setAttribute(MSG, errorMessage);
+            pageDestination = REGISTRATION_PAGE;
         }
+        RequestDispatcher view = getServletContext().getRequestDispatcher(response.encodeURL(pageDestination));
+        try {
+            view.forward(request, response);
+        } catch (ServletException | IOException ex) {
+            errorMessage = ex.getMessage();
+            request.setAttribute(MSG, errorMessage);
+        }
+
     }
-    public void saveNewRegistation(String userName, String password) {
+
+    public void saveNewRegistration(String userName, String password) throws Exception {
         // retrieve userName and password from registration form then save new account:
         User user = new User();
         user.setUsername(userName);
@@ -62,23 +114,26 @@ public class RegistrationController extends HttpServlet {
 
         List<Authorities> auths = new ArrayList<>();
         Authorities auth = new Authorities();
-        auth.setAuthority("ROLE_MEMBER"); // or, use any role you want
-        auths.add(auth);
+        auth.setAuthority(ROLE_USER);
         auth.setUsername(user.getUsername());
 
-        user = userService.edit(user); // you need a UserService
-
+        userService.edit(user); // you need a UserService
+        authService.edit(auth);
         try {
-            // you need an email service class
-            emailService.sendEmail(user.getUsername(), null);
+            try {
+                emailService.sendEmail(user.getUsername());
+            } catch (Exception ex) {
+                throw new Exception(ex.getMessage() + ", " + ex.getCause());
+            }
 
         } catch (MailException ex) {
-            throw new RuntimeException("Sorry, the verification email could not be "
-                    + "sent. Please notify the webmaster at "
-                    + "webmaster@gmail.com and we'll complete the "
-                    + "process for you. Thanks for your patience.");
+            throw new RuntimeException(EMAIL_ERROR_MSG);
         }
     }
+    
+    
+    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -107,7 +162,8 @@ public class RegistrationController extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-  /**
+
+    /**
      * Called after the constructor is called by the container. This is the
      * correct place to do one-time initialization.
      *
@@ -119,8 +175,11 @@ public class RegistrationController extends HttpServlet {
         ServletContext sctx = getServletContext();
         WebApplicationContext ctx
                 = WebApplicationContextUtils.getWebApplicationContext(sctx);
-        userService = (UserService) ctx.getBean("userService");;
+        userService = (UserService) ctx.getBean("userService");
+        authService = (AuthoritiesService) ctx.getBean("authoritiesService");
+        emailService = (EmailService) ctx.getBean("emailService");
     }
+
     /**
      * Returns a short description of the servlet.
      *
@@ -131,7 +190,7 @@ public class RegistrationController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-     /*
+    /*
         * Helper method that creates a salted SHA-512 hash composed of password (pwd) and 
         * salt (username).
      */

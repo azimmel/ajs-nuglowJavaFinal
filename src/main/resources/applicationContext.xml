@@ -43,6 +43,9 @@
     <sec:http pattern="/css/**" security="none"/>
     <sec:http pattern="/js/**" security="none"/>
     <sec:http pattern="/imgs/**" security="none"/>
+    <sec:http pattern="/index.html" security="none"/>
+    <sec:http pattern="/registration.jsp" security="none"/>
+    <sec:http pattern="/registrationVerified.jsp" security="none"/>
     <sec:http auto-config="true" use-expressions="true" disable-url-rewriting="true">
             
         <!-- On Glassfish, dev ports are 8080 and 8181, whereas on 
@@ -58,6 +61,10 @@
         <sec:intercept-url pattern="/login.jsp" 
                            access="isAnonymous()" requires-channel="https"/>
         <sec:intercept-url pattern="/index.html" 
+                           access="isAnonymous()" requires-channel="https"/>
+        <sec:intercept-url pattern="/registration.jsp" 
+                           access="isAnonymous()" requires-channel="https"/>
+        <sec:intercept-url pattern="/registrationVerified.jsp" 
                            access="isAnonymous()" requires-channel="https"/>
         <sec:intercept-url pattern="/loginerror.jsp" 
                            access="isAnonymous()" requires-channel="https"/>
@@ -126,7 +133,7 @@
             </bean>
         </property>
     </bean>
-        <!-- *********EMAIL SENDER STUFF** did no work ~~>${mail.username} ${mail.password}******** -->
+    <!-- *********EMAIL SENDER STUFF** did no work ~~>${mail.username} ${mail.password}******** -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="mail.azimmelportfolio.com"/>
         <property name="username" value="azimmel@azimmelportfolio.com"/>
@@ -148,7 +155,7 @@
     <bean id="templateMessage" class="org.springframework.mail.SimpleMailMessage">
         <!-- if using Gmail, the from must be the address of the account holder -->
         <property name="from" value="azimmel@azimmelportfolio.com"/>
-	<!-- replace the value text with your own -->
+        <!-- replace the value text with your own -->
         <property name="subject" value="Web App Registration - One More Step Required"/>
     </bean>
     <!-- ********* /EMAIL SENDER STUFF ************* -->

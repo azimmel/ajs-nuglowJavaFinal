@@ -18,10 +18,11 @@
         <jsp:include page="cssBundle.jsp"/>
     </head>
     <body style="${background}">
+
         <!--navigation header and wrapper start-->
         <jsp:include page="header.jsp"/>
-        
-                <form name="productsList" id="productsList" class="forms form-horizontal" method="POST" action="<%= response.encodeURL("Shop?action=list")%>" onsubmit="">
+    <sec:authorize access="hasAnyRole('ROLE_MGR,ROLE_USER')">
+        <form name="productsList" id="productsList" class="forms form-horizontal" method="POST" action="<%= response.encodeURL("Shop?action=list")%>" onsubmit="">
             <fieldset>
                 <legend>Store</legend>
 
@@ -34,8 +35,9 @@
         </form>
 
         <jsp:include page="footer.jsp"/>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>        
-        <script src="js/modal.js" type="text/javascript"></script>
-        <script src="js/validation.js" type="text/javascript"></script>
-    </body>
+    </sec:authorize>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>        
+    <script src="js/modal.js" type="text/javascript"></script>
+    <script src="js/validation.js" type="text/javascript"></script>
+</body>
 </html>

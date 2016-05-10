@@ -20,8 +20,10 @@
         <jsp:include page="cssBundle.jsp"/>
     </head>
     <body style="${background}">
+        
         <!--navigation header and wrapper start-->
         <jsp:include page="header.jsp"/>
+        <sec:authorize access="hasAnyRole('ROLE_MGR')">
         <!--Body content-->
         <form method="POST" action="<%= response.encodeURL("Nuglow?action=list")%>" class="detailsForm" name="detailsForm" id="detailsForm">
             <input type="submit" value="Back" name="submit" class="btn btn-info"/>
@@ -82,7 +84,7 @@
         <!--/body content-->
         <!--footer and wrapper end-->
         <jsp:include page="footer.jsp"/>
-        
+        </sec:authorize>
         
     </body>
 </html>

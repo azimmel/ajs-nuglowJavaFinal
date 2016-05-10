@@ -18,8 +18,10 @@
         <jsp:include page="cssBundle.jsp"/>
     </head>
     <body style="${background}">
+        
         <!--navigation header and wrapper start-->
         <jsp:include page="header.jsp"/>
+        <sec:authorize access="hasAnyRole('ROLE_MGR')">
         <!--Body content-->
         <form name="productsList" id="productsList" class="forms form-horizontal" method="POST" action="<%= response.encodeURL("Nuglow?action=preferences")%>" onsubmit="">
             <fieldset>
@@ -37,5 +39,6 @@
         <!--/body content-->
         <!--footer and wrapper end-->
         <jsp:include page="footer.jsp"/>
+        </sec:authorize>
     </body>
 </html>

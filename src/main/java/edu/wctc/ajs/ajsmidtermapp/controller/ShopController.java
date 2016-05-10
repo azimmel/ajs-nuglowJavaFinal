@@ -154,6 +154,13 @@ public class ShopController extends HttpServlet {
                         request.setAttribute(MSG, e.getCause());
                         this.getProductList(request, productService);
                         pageDestination = RESULTS_PAGE;
+                        RequestDispatcher view = getServletContext().getRequestDispatcher(response.encodeURL(pageDestination));
+                        try {
+                            view.forward(request, response);
+                        } catch (ServletException | IOException ex) {
+                            errorMessage = ex.getMessage();
+                            request.setAttribute(MSG, errorMessage);
+                        }
                     }
                     if (id == 0) {
                         request.setAttribute(MSG, DEFAULT_ERROR);
@@ -197,6 +204,13 @@ public class ShopController extends HttpServlet {
                         username = getUsername();
                     } catch (Exception e) {
                         pageDestination = LOGIN;
+                        RequestDispatcher view = getServletContext().getRequestDispatcher(response.encodeURL(pageDestination));
+                        try {
+                            view.forward(request, response);
+                        } catch (ServletException | IOException ex) {
+                            errorMessage = ex.getMessage();
+                            request.setAttribute(MSG, errorMessage);
+                        }
                     }
                     String billingCheck = request.getParameter(CHECKBOX);
                     String name = "";
@@ -297,7 +311,7 @@ public class ShopController extends HttpServlet {
                         deleteAllCartItems();
                         name = firstName + " " + lastName;
                     }
-                    
+
                     request.setAttribute(NAME, name);
                     createShoppingCartPage(request);
                     pageDestination = ORDER_PROCESSED_PAGE;
@@ -418,7 +432,7 @@ public class ShopController extends HttpServlet {
         String username = getUsername();
         User user = getUser(username);
         List<ShoppingCart> userCart = cartService.findByUser(user);
-        for(ShoppingCart s : userCart){
+        for (ShoppingCart s : userCart) {
             cartService.remove(s);
         }
     }

@@ -19,8 +19,10 @@
         <jsp:include page="cssBundle.jsp"/>
     </head>
     <body style="${background}">
+        
         <!--navigation header and wrapper start-->
         <jsp:include page="header.jsp"/>
+        <sec:authorize access="hasAnyRole('ROLE_MGR,ROLE_USER')">
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <c:forEach var="product" items="${productList}">
@@ -46,6 +48,7 @@
         </div>
         <div class="col-md-1"></div>
         <jsp:include page="footer.jsp"/>
+        </sec:authorize>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>        
         <script src="js/modal.js" type="text/javascript"></script>
         <script src="js/validation.js" type="text/javascript"></script>

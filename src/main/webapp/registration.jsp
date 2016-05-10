@@ -21,34 +21,36 @@
     <body style="${background}">
         <!--navigation header and wrapper start-->
         <jsp:include page="header.jsp"/>
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-            <div class="col-md-1"></div>
-            <div class="col-md-10">
-                <form method="POST" action="<%= response.encodeURL("Register?action=register")%>" class="col-md-12">
-                    <fieldset>
-                        <legend>New User Registration</legend>
-                        <div class="form-group">
-                            <label for="userName" class="col-lg-2 control-label">Email:</label>
-                            <div class="col-lg-10">
-                                <input type="text" class="form-control" name="userName" id="userName" value="">
+        <sec:authorize access="isAnonymous()">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <form method="POST" action="<%= response.encodeURL("Register?action=register")%>" class="col-md-12">
+                        <fieldset>
+                            <legend>New User Registration</legend>
+                            <div class="form-group">
+                                <label for="username" class="col-lg-2 control-label">Email:</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" name="username" id="userName" value="">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-lg-2 control-label">Password:</label>
-                            <div class="col-lg-10">
-                                <input type="text" class="form-control" name="password" id="password" value="">
+                            <div class="form-group">
+                                <label for="password" class="col-lg-2 control-label">Password:</label>
+                                <div class="col-lg-10">
+                                    <input type="password" class="form-control" name="password" id="password" value="">
+                                </div>
                             </div>
-                        </div>
-                        <input type="submit" value="Register" name="submit" />
-                    </fieldset>
-                </form>
+                            <input type="submit" value="Register" name="submit" />
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="col-md-1"></div>
             </div>
-            <div class="col-md-1"></div>
-        </div>
-        <div class="col-md-2"></div>
+            <div class="col-md-2"></div>
 
-        <jsp:include page="footer.jsp"/>
+            <jsp:include page="footer.jsp"/>
+        </sec:authorize>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>        
         <script src="js/modal.js" type="text/javascript"></script>
         <script src="js/validation.js" type="text/javascript"></script>

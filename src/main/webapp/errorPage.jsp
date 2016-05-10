@@ -14,7 +14,7 @@
     <body>
         <style>
             body{
-                background-image: url(404.jpg);
+                background-image: url(../imgs/404.jpg);
                 background-color: #51607A;
             }
             </style>
