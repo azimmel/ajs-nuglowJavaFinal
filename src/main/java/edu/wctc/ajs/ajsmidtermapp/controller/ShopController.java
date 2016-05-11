@@ -29,7 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- *
+ * Shop controller / servlet controlling all pages having to do with the Nuglow
+ * shop, shopping cart and ordering process.
  * @author Alyson
  */
 @WebServlet(name = "ShopController", urlPatterns = {"/Shop"})

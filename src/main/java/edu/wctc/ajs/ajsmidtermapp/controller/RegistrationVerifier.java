@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
 import edu.wctc.ajs.ajsmidtermapp.entity.User;
-import edu.wctc.ajs.ajsmidtermapp.service.AuthoritiesService;
 import edu.wctc.ajs.ajsmidtermapp.service.EmailService;
 import edu.wctc.ajs.ajsmidtermapp.service.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -24,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- *
+ * Registration verification controller for all pages after verification upon registration. 
  * @author Alyson
  */
 @WebServlet(name = "RegistrationVerifier", urlPatterns = {"/Verify"})

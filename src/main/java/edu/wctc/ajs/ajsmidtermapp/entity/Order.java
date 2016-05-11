@@ -79,13 +79,6 @@ public class Order implements Serializable {
      * @param orderId The id of the order.
      */
     public Order(Integer orderId) {
-        if(orderId == null || orderId == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.orderId = orderId;
     }
 
@@ -101,14 +94,6 @@ public class Order implements Serializable {
      * @param billingAddress Billing address for the user.
      */
     public Order(Integer orderId, Date orderDate, String username, String shippingAddress, String itemsOrdered, double subtotal, double total, String billingAddress) {
-        if(orderId == null || orderId == 0 || orderDate == null || username.isEmpty() || shippingAddress.isEmpty() || subtotal == 0 
-                || total == 0 || billingAddress.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.orderId = orderId;
         this.orderDate = orderDate;
         this.username = username;
@@ -123,7 +108,7 @@ public class Order implements Serializable {
      * Get the orders Id.
      * @return the orders Id.
      */
-    public Integer getOrderId() {
+    public final Integer getOrderId() {
         return orderId;
     }
 
@@ -131,14 +116,7 @@ public class Order implements Serializable {
      * Sets the orders Id.
      * @param orderId the orders Id.
      */
-    public void setOrderId(Integer orderId) {
-        if(orderId == null || orderId == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
@@ -146,7 +124,7 @@ public class Order implements Serializable {
      * Get the date the order was placed.
      * @return the date the order was placed.
      */
-    public Date getOrderDate() {
+    public final Date getOrderDate() {
         return orderDate;
     }
 
@@ -154,14 +132,7 @@ public class Order implements Serializable {
      * Sets the date the order was placed.
      * @param orderDate the date the order was placed.
      */
-    public void setOrderDate(Date orderDate) {
-        if(orderDate == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -169,7 +140,7 @@ public class Order implements Serializable {
      * Gets the users username.
      * @return users username.
      */
-    public String getUsername() {
+    public final String getUsername() {
         return username;
     }
 
@@ -177,14 +148,7 @@ public class Order implements Serializable {
      * Sets the users username.
      * @param username users username.
      */
-    public void setUsername(String username) {
-        if(username.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setUsername(String username) {
         this.username = username;
     }
 
@@ -192,7 +156,7 @@ public class Order implements Serializable {
      * Gets the shipping address for the users order.
      * @return the shipping address for the users order.
      */
-    public String getShippingAddress() {
+    public final String getShippingAddress() {
         return shippingAddress;
     }
 
@@ -201,13 +165,6 @@ public class Order implements Serializable {
      * @param shippingAddress the shipping address for the users order.
      */
     public void setShippingAddress(String shippingAddress) {
-        if(shippingAddress.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.shippingAddress = shippingAddress;
     }
 
@@ -215,7 +172,7 @@ public class Order implements Serializable {
      * Gets the items ordered.
      * @return items that have been ordered.
      */
-    public String getItemsOrdered() {
+    public final String getItemsOrdered() {
         return itemsOrdered;
     }
 
@@ -223,14 +180,7 @@ public class Order implements Serializable {
      * Sets the items ordered.
      * @param itemsOrdered items that have been ordered.
      */
-    public void setItemsOrdered(String itemsOrdered) {
-        if(itemsOrdered.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setItemsOrdered(String itemsOrdered) {
         this.itemsOrdered = itemsOrdered;
     }
 
@@ -238,7 +188,7 @@ public class Order implements Serializable {
      * Gets the subtotal for the order.
      * @return The subtotal for the order.
      */
-    public double getSubtotal() {
+    public final double getSubtotal() {
         return subtotal;
     }
 
@@ -246,14 +196,7 @@ public class Order implements Serializable {
      * Sets the subtotal for the order.
      * @param subtotal The subtotal for the order.
      */
-    public void setSubtotal(double subtotal) {
-        if(subtotal == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -261,7 +204,7 @@ public class Order implements Serializable {
      * Gets the total for the order.
      * @return The total for the order.
      */
-    public double getTotal() {
+    public final double getTotal() {
         return total;
     }
 
@@ -269,14 +212,7 @@ public class Order implements Serializable {
      * Sets the total for the order.
      * @param total the total for the order.
      */
-    public void setTotal(double total) {
-        if(total == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setTotal(double total) {
         this.total = total;
     }
 
@@ -284,7 +220,7 @@ public class Order implements Serializable {
      * Gets the billing address for the users order.
      * @return the billing address for the order.
      */
-    public String getBillingAddress() {
+    public final String getBillingAddress() {
         return billingAddress;
     }
 
@@ -292,14 +228,7 @@ public class Order implements Serializable {
      * Sets the billing address for the users order.
      * @param billingAddress the billing address for the order.
      */
-    public void setBillingAddress(String billingAddress) {
-        if(billingAddress.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setBillingAddress(String billingAddress) {
         this.billingAddress = billingAddress;
     }
 

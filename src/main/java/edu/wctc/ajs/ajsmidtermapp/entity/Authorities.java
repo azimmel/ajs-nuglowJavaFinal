@@ -54,13 +54,6 @@ public class Authorities implements Serializable {
      * @param authoritiesId the id of the authorities record.
      */
     public Authorities(Integer authoritiesId) {
-        if(authoritiesId == null || authoritiesId == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.authoritiesId = authoritiesId;
     }
 
@@ -68,7 +61,7 @@ public class Authorities implements Serializable {
      * Gets the id for the authorities record.
      * @return the id.
      */
-    public Integer getAuthoritiesId() {
+    public final Integer getAuthoritiesId() {
         return authoritiesId;
     }
 
@@ -76,14 +69,7 @@ public class Authorities implements Serializable {
      * Sets the id for the authorities record.
      * @param authoritiesId The id.
      */
-    public void setAuthoritiesId(Integer authoritiesId) {
-        if(authoritiesId == null || authoritiesId == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setAuthoritiesId(Integer authoritiesId) {
         this.authoritiesId = authoritiesId;
     }
 
@@ -91,7 +77,7 @@ public class Authorities implements Serializable {
      * Gets the username of the user.
      * @return The users username.
      */
-    public String getUsername() {
+    public final String getUsername() {
         return username;
     }
 
@@ -99,14 +85,7 @@ public class Authorities implements Serializable {
      * Sets the username that the role is assigned to.
      * @param username The users username.
      */
-    public void setUsername(String username) {
-        if(username.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setUsername(String username) {
         this.username = username;
     }
 
@@ -114,7 +93,7 @@ public class Authorities implements Serializable {
      * Gets the authority for the user.
      * @return the role for the user.
      */
-    public String getAuthority() {
+    public final String getAuthority() {
         return authority;
     }
 
@@ -123,14 +102,8 @@ public class Authorities implements Serializable {
      * This is the roll for the username. Ex: 'ROLE_MGR' or 'ROLE_USER'
      * @param authority roll for the username.
      */
-    public void setAuthority(String authority) {
-        if(authority.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setAuthority(String authority) {
+        
         this.authority = authority;
     }
 

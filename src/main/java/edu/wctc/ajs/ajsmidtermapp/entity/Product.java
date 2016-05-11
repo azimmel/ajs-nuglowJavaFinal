@@ -79,13 +79,6 @@ public class Product implements Serializable {
      * @param productId Product's Id number.
      */
     public Product(Integer productId) {
-        if(productId == null || productId == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.productId = productId;
     }
 
@@ -97,13 +90,6 @@ public class Product implements Serializable {
      * @param productPrice Price of the product
      */
     public Product(Integer productId, String productName, String productType, double productPrice) {
-        if(productId == null || productId == 0 || productName.isEmpty() || productType.isEmpty() || productPrice == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.productId = productId;
         this.productName = productName;
         this.productType = productType;
@@ -114,7 +100,7 @@ public class Product implements Serializable {
      * Gets the products Id.
      * @return The products Id.
      */
-    public Integer getProductId() {
+    public final Integer getProductId() {
         return productId;
     }
 
@@ -122,14 +108,7 @@ public class Product implements Serializable {
      * Sets the products Id.
      * @param productId products Id number.
      */
-    public void setProductId(Integer productId) {
-        if(productId == null || productId == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setProductId(Integer productId) {
         this.productId = productId;
     }
 
@@ -137,7 +116,7 @@ public class Product implements Serializable {
      * Gets the product Id.
      * @return the products Id number.
      */
-    public String getProductName() {
+    public final String getProductName() {
         return productName;
     }
 
@@ -145,14 +124,7 @@ public class Product implements Serializable {
      * Sets the products name.
      * @param productName the products name.
      */
-    public void setProductName(String productName) {
-        if(productName.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setProductName(String productName) {
         this.productName = productName;
     }
 
@@ -160,7 +132,7 @@ public class Product implements Serializable {
      * Gets the products Type/category.
      * @return the products category/type.
      */
-    public String getProductType() {
+    public final String getProductType() {
         return productType;
     }
 
@@ -168,14 +140,7 @@ public class Product implements Serializable {
      * Sets the products type/category.
      * @param productType the products type/category
      */
-    public void setProductType(String productType) {
-        if(productType.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setProductType(String productType) {
         this.productType = productType;
     }
 
@@ -183,7 +148,7 @@ public class Product implements Serializable {
      * Gets the products price.
      * @return the products price.
      */
-    public double getProductPrice() {
+    public final double getProductPrice() {
         return productPrice;
     }
 
@@ -191,14 +156,7 @@ public class Product implements Serializable {
      * Sets the products price.
      * @param productPrice products price.
      */
-    public void setProductPrice(double productPrice) {
-        if(productPrice == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
     }
 
@@ -206,7 +164,7 @@ public class Product implements Serializable {
      * Gets the products Image URL.
      * @return the products image url.
      */
-    public String getProductImage() {
+    public final String getProductImage() {
         return productImage;
     }
 
@@ -214,14 +172,7 @@ public class Product implements Serializable {
      * Sets the products Image URL.
      * @param productImage the products image url.
      */
-    public void setProductImage(String productImage) {
-        if(productImage.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setProductImage(String productImage) {
         this.productImage = productImage;
     }
 
@@ -229,7 +180,7 @@ public class Product implements Serializable {
      * Gets the products description.
      * @return the products description.
      */
-    public String getProductDescription() {
+    public final String getProductDescription() {
         return productDescription;
     }
 
@@ -237,14 +188,7 @@ public class Product implements Serializable {
      * Sets the products description.
      * @param productDescription the products description.
      */
-    public void setProductDescription(String productDescription) {
-        if(productDescription.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
 

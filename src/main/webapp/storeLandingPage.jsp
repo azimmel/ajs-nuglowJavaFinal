@@ -24,11 +24,10 @@
     <sec:authorize access="hasAnyRole('ROLE_MGR,ROLE_USER')">
         <form name="productsList" id="productsList" class="forms form-horizontal" method="POST" action="<%= response.encodeURL("Shop?action=list")%>" onsubmit="">
             <fieldset>
-                <legend>Store</legend>
-
+                <legend style="margin-left: 8%;">Store</legend>
                 <div class='form-group'>
-                    <div class="col-lg-10 col-lg-offset-2">
-                        <input type="submit" name="submit" value="Nuglow Products" class="btn btn-default"/>
+                    <div class="col-md-10">
+                        <input type="submit" name="submit" value="Nuglow Products" class="btn" style="background-color: #58337A; color:white; border-color: #251336; margin-left: 10%;"/>
                     </div>
                 </div>
             </fieldset>

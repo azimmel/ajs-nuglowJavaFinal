@@ -56,13 +56,6 @@ public class ShoppingCart implements Serializable {
      * @param cartId Carts Id number.
      */
     public ShoppingCart(Integer cartId) {
-        if(cartId == 0 || cartId == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.cartId = cartId;
     }
 
@@ -70,7 +63,7 @@ public class ShoppingCart implements Serializable {
      * Gets the carts Id number.
      * @return carts Id number.
      */
-    public Integer getCartId() {
+    public final Integer getCartId() {
         return cartId;
     }
 
@@ -78,14 +71,7 @@ public class ShoppingCart implements Serializable {
      * Sets the carts Id number.
      * @param cartId id of the shopping cart record to find.
      */
-    public void setCartId(Integer cartId) {
-        if(cartId == null || cartId == 0){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setCartId(Integer cartId) {
         this.cartId = cartId;
     }
 
@@ -93,7 +79,7 @@ public class ShoppingCart implements Serializable {
      * Gets the product based on the productId.
      * @return Product 
      */
-    public Product getProductId() {
+    public final Product getProductId() {
         return productId;
     }
 
@@ -101,14 +87,7 @@ public class ShoppingCart implements Serializable {
      * Sets the product based on the productId
      * @param productId Product
      */
-    public void setProductId(Product productId) {
-        if(productId == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setProductId(Product productId) {
         this.productId = productId;
     }
 
@@ -116,7 +95,7 @@ public class ShoppingCart implements Serializable {
      * Gets the user object based on the username
      * @return user object.
      */
-    public User getUsername() {
+    public final User getUsername() {
         return username;
     }
 
@@ -124,14 +103,7 @@ public class ShoppingCart implements Serializable {
      * Sets the user object based on the username
      * @param username User object
      */
-    public void setUsername(User username) {
-        if(username == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setUsername(User username) {
         this.username = username;
     }
 

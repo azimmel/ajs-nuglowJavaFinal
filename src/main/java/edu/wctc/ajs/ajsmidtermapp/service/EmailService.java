@@ -32,7 +32,7 @@ public class EmailService implements Serializable {
 
     
     
-    public void setTemplateMessage(org.springframework.mail.SimpleMailMessage templateMessage) {
+    public final void setTemplateMessage(org.springframework.mail.SimpleMailMessage templateMessage) {
         if(templateMessage == null){
             try {
                 throw new DataAccessException();
@@ -43,8 +43,8 @@ public class EmailService implements Serializable {
         this.templateMessage = templateMessage;
     }
 
-    //@Override
-    public void sendEmail(String userEmail) throws MailException, Exception {
+    
+    public final void sendEmail(String userEmail) throws MailException, Exception {
         if(userEmail.isEmpty()){
             try {
                 throw new DataAccessException();

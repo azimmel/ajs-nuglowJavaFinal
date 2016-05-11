@@ -30,7 +30,7 @@ public class ShaHashGeneratorApp {
 
     }
 
-    public static String sha512(String pwd, String salt) {
+    public final static String sha512(String pwd, String salt) {
 
             ShaPasswordEncoder pe = new ShaPasswordEncoder(512);
             pe.setIterations(1024);

@@ -1,25 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.wctc.ajs.ajsmidtermapp.controller;
 
 import edu.wctc.ajs.ajsmidtermapp.entity.Authorities;
 import edu.wctc.ajs.ajsmidtermapp.entity.User;
 import edu.wctc.ajs.ajsmidtermapp.service.AuthoritiesService;
 import edu.wctc.ajs.ajsmidtermapp.service.EmailService;
-import edu.wctc.ajs.ajsmidtermapp.service.OrderService;
-import edu.wctc.ajs.ajsmidtermapp.service.ProductService;
-import edu.wctc.ajs.ajsmidtermapp.service.ShoppingCartService;
 import edu.wctc.ajs.ajsmidtermapp.service.UserService;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -33,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- *
+ * Registration controller for Pre verification registration pages.
  * @author Alyson
  */
 @WebServlet(name = "RegistrationController", urlPatterns = {"/Register"})

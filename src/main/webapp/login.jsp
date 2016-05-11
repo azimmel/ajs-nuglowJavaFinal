@@ -35,7 +35,9 @@
                 </div>
             </div>
         </form>
-
+        <form method="POST" class="col-md-12" action="<%= response.encodeURL("registration.jsp")%>">
+            <input type="submit" class="btn" style="background-color: #58337A; color:white; border-color: #251336;" name="submit" id="submit" value="Register">
+        </form>
 
         <jsp:include page="footer.jsp"/>
         </sec:authorize>

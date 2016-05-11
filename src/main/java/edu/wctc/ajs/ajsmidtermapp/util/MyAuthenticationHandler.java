@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 public class MyAuthenticationHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
+    public final void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
         final String USER_URL = "/index.html";
         final String ADMIN_URL = "/admin.jsp";
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());

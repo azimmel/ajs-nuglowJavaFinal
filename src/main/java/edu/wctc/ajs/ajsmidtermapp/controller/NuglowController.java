@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,7 +32,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- *
+ * Controller Servlet for the Nuglow product pages and admin pages
  * @author Alyson
  */
 @WebServlet(name = "NuglowController", urlPatterns = {"/Nuglow"})
@@ -128,7 +127,7 @@ public class NuglowController extends HttpServlet {
                 request.setAttribute(DATE, getYearDate());
             } catch (Exception ex) {
                 errorMessage = ex.getMessage();
-                request.setAttribute("msg", errorMessage);
+                request.setAttribute(MSG, errorMessage);
             }
             switch (action) {
                 case LIST:
@@ -430,12 +429,12 @@ public class NuglowController extends HttpServlet {
         request.setAttribute(TOTAL_ITEMS, cartItemsDisplay);
     }
 
-    public User getUser(String username) {
+    private User getUser(String username) {
         User user = userService.findById(username);
         return user;
     }
 
-    public String getUsername() {
+    private String getUsername() {
         SpringSecurityCurrentUserInformationHandler u;
         u = new SpringSecurityCurrentUserInformationHandler();
         String username = u.getUsername();//get logged in username

@@ -30,11 +30,11 @@ public class AuthoritiesService {
     public AuthoritiesService() {
     }
 
-    public List<Authorities> findAll() {
+    public final List<Authorities> findAll() {
         return authoritiesRepo.findAll();
     }
 
-    public Authorities findById(String id) {
+    public final Authorities findById(String id) {
         if(id.isEmpty()){
             try {
                 throw new DataAccessException();
@@ -53,7 +53,7 @@ public class AuthoritiesService {
      * @param authorities
      */
     @Transactional
-    public void remove(Authorities authorities) {
+    public final void remove(Authorities authorities) {
         if(authorities == null){
             try {
                 throw new DataAccessException();
@@ -73,7 +73,7 @@ public class AuthoritiesService {
      * @return
      */
     @Transactional
-    public Authorities edit(Authorities authority) {
+    public final Authorities edit(Authorities authority) {
         if(authority == null){
             try {
                 throw new DataAccessException();
