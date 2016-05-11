@@ -55,13 +55,6 @@ public class User implements Serializable {
      * @param username name of the user
      */
     public User(String username) {
-        if(username.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
         this.username = username;
     }
 
@@ -69,7 +62,7 @@ public class User implements Serializable {
      * Gets the users username.
      * @return the user's name is returned.
      */
-    public String getUsername() {
+    public final String getUsername() {
         return username;
     }
 
@@ -77,14 +70,7 @@ public class User implements Serializable {
      * Sets the users username.
      * @param username the users name.
      */
-    public void setUsername(String username) {
-        if(username.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setUsername(String username) {
         this.username = username;
     }
 
@@ -92,7 +78,7 @@ public class User implements Serializable {
      * Gets the users password.
      * @return users password.
      */
-    public String getPassword() {
+    public final String getPassword() {
         return password;
     }
 
@@ -100,14 +86,7 @@ public class User implements Serializable {
      * Sets the users password
      * @param password the users password.
      */
-    public void setPassword(String password) {
-        if(password.isEmpty()){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setPassword(String password) {
         this.password = password;
     }
 
@@ -116,7 +95,7 @@ public class User implements Serializable {
      * enabled or disabled.
      * @return True- enables. False- disables.
      */
-    public Boolean getEnabled() {
+    public final Boolean getEnabled() {
         return enabled;
     }
 
@@ -125,14 +104,7 @@ public class User implements Serializable {
      * 
      * @param enabled True- enables. False- disables.
      */
-    public void setEnabled(Boolean enabled) {
-        if(enabled == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -140,7 +112,7 @@ public class User implements Serializable {
      * Get the date of the last time the account was updated.
      * @return date of the last time the account was updated.
      */
-    public Date getLastUpdate() {
+    public final Date getLastUpdate() {
         return lastUpdate;
     }
 
@@ -148,14 +120,7 @@ public class User implements Serializable {
      * Sets the date for the last time the users account was updated.
      * @param lastUpdate Date for the last time the account was updated.
      */
-    public void setLastUpdate(Date lastUpdate) {
-        if(lastUpdate == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -163,7 +128,7 @@ public class User implements Serializable {
      * Gets the version for the account.
      * @return version number
      */
-    public Integer getVersion() {
+    public final Integer getVersion() {
         return version;
     }
 
@@ -171,14 +136,7 @@ public class User implements Serializable {
      * Sets the version for the account.
      * @param version version number.
      */
-    public void setVersion(Integer version) {
-        if(version == 0 || version == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public final void setVersion(Integer version) {
         this.version = version;
     }
 
