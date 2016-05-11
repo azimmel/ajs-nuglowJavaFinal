@@ -1,7 +1,6 @@
 
 package edu.wctc.ajs.ajsmidtermapp.util;
 
-import java.security.Principal;
 import java.util.Objects;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;

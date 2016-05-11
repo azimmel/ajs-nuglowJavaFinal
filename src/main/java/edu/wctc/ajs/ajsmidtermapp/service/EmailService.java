@@ -1,19 +1,21 @@
 package edu.wctc.ajs.ajsmidtermapp.service;
 
+import edu.wctc.ajs.ajsmidtermapp.entity.User;
+import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
 import java.io.Serializable;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import java.util.logging.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Email Service class is used for self registration on the webpage.
+ * This class uses MailSender and SimpleMailMessage for generating an email.
  * @author Alyson
+ * @version 1.1
  */
 @Service("emailService")
 public class EmailService implements Serializable {
@@ -31,11 +33,25 @@ public class EmailService implements Serializable {
     
     
     public void setTemplateMessage(org.springframework.mail.SimpleMailMessage templateMessage) {
+        if(templateMessage == null){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                java.util.logging.Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         this.templateMessage = templateMessage;
     }
 
     //@Override
     public void sendEmail(String userEmail) throws MailException, Exception {
+        if(userEmail.isEmpty()){
+            try {
+                throw new DataAccessException();
+            } catch (DataAccessException ex) {
+                java.util.logging.Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         // Create a Base64 encode of the username
         byte[] encoded = Base64.encode(userEmail.getBytes());
         String base64Username = new String(encoded);

@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- *
+ * Shopping Cart Repository for the ShoppingCartService. 
+ * This class has a custom query for locating by the username. 
  * @author Alyson
  */
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Integer>, Serializable {
