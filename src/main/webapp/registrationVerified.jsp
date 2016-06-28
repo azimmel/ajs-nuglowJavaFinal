@@ -15,7 +15,7 @@
     <body style="${background}">
         <!--navigation header and wrapper start-->
         <jsp:include page="header.jsp"/>
-        <sec:authorize access="isAnonymous()">
+        <sec:authorize access="permitAll()">
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <h1>You Are Verified!</h1>

@@ -1,6 +1,7 @@
 package edu.wctc.ajs.ajsmidtermapp.entity;
 
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
+import edu.wctc.ajs.ajsmidtermapp.exception.NullOrEmptyArgumentException;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +62,7 @@ public class Authorities implements Serializable {
      * Gets the id for the authorities record.
      * @return the id.
      */
-    public final Integer getAuthoritiesId() {
+    public Integer getAuthoritiesId() {
         return authoritiesId;
     }
 
@@ -69,7 +70,7 @@ public class Authorities implements Serializable {
      * Sets the id for the authorities record.
      * @param authoritiesId The id.
      */
-    public final void setAuthoritiesId(Integer authoritiesId) {
+    public void setAuthoritiesId(Integer authoritiesId) {
         this.authoritiesId = authoritiesId;
     }
 
@@ -77,7 +78,7 @@ public class Authorities implements Serializable {
      * Gets the username of the user.
      * @return The users username.
      */
-    public final String getUsername() {
+    public String getUsername() {
         return username;
     }
 
@@ -85,7 +86,7 @@ public class Authorities implements Serializable {
      * Sets the username that the role is assigned to.
      * @param username The users username.
      */
-    public final void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -93,7 +94,7 @@ public class Authorities implements Serializable {
      * Gets the authority for the user.
      * @return the role for the user.
      */
-    public final String getAuthority() {
+    public String getAuthority() {
         return authority;
     }
 
@@ -102,7 +103,7 @@ public class Authorities implements Serializable {
      * This is the roll for the username. Ex: 'ROLE_MGR' or 'ROLE_USER'
      * @param authority roll for the username.
      */
-    public final void setAuthority(String authority) {
+    public void setAuthority(String authority) {
         
         this.authority = authority;
     }

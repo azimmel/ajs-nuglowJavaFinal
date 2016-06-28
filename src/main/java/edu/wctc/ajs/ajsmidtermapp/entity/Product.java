@@ -1,6 +1,7 @@
 package edu.wctc.ajs.ajsmidtermapp.entity;
 
 import edu.wctc.ajs.ajsmidtermapp.exception.DataAccessException;
+import edu.wctc.ajs.ajsmidtermapp.exception.NullOrEmptyArgumentException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -100,7 +101,7 @@ public class Product implements Serializable {
      * Gets the products Id.
      * @return The products Id.
      */
-    public final Integer getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
@@ -108,7 +109,7 @@ public class Product implements Serializable {
      * Sets the products Id.
      * @param productId products Id number.
      */
-    public final void setProductId(Integer productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
@@ -116,7 +117,7 @@ public class Product implements Serializable {
      * Gets the product Id.
      * @return the products Id number.
      */
-    public final String getProductName() {
+    public String getProductName() {
         return productName;
     }
 
@@ -124,7 +125,7 @@ public class Product implements Serializable {
      * Sets the products name.
      * @param productName the products name.
      */
-    public final void setProductName(String productName) {
+    public void setProductName(String productName) {
         this.productName = productName;
     }
 
@@ -132,7 +133,7 @@ public class Product implements Serializable {
      * Gets the products Type/category.
      * @return the products category/type.
      */
-    public final String getProductType() {
+    public String getProductType() {
         return productType;
     }
 
@@ -140,7 +141,7 @@ public class Product implements Serializable {
      * Sets the products type/category.
      * @param productType the products type/category
      */
-    public final void setProductType(String productType) {
+    public void setProductType(String productType) {
         this.productType = productType;
     }
 
@@ -148,7 +149,7 @@ public class Product implements Serializable {
      * Gets the products price.
      * @return the products price.
      */
-    public final double getProductPrice() {
+    public double getProductPrice() {
         return productPrice;
     }
 
@@ -156,7 +157,7 @@ public class Product implements Serializable {
      * Sets the products price.
      * @param productPrice products price.
      */
-    public final void setProductPrice(double productPrice) {
+    public void setProductPrice(double productPrice) {
         this.productPrice = productPrice;
     }
 
@@ -164,7 +165,7 @@ public class Product implements Serializable {
      * Gets the products Image URL.
      * @return the products image url.
      */
-    public final String getProductImage() {
+    public String getProductImage() {
         return productImage;
     }
 
@@ -172,7 +173,7 @@ public class Product implements Serializable {
      * Sets the products Image URL.
      * @param productImage the products image url.
      */
-    public final void setProductImage(String productImage) {
+    public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
 
@@ -180,7 +181,7 @@ public class Product implements Serializable {
      * Gets the products description.
      * @return the products description.
      */
-    public final String getProductDescription() {
+    public String getProductDescription() {
         return productDescription;
     }
 
@@ -188,7 +189,7 @@ public class Product implements Serializable {
      * Sets the products description.
      * @param productDescription the products description.
      */
-    public final void setProductDescription(String productDescription) {
+    public void setProductDescription(String productDescription) {
         this.productDescription = productDescription;
     }
 

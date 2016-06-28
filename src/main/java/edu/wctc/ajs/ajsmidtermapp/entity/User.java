@@ -62,7 +62,7 @@ public class User implements Serializable {
      * Gets the users username.
      * @return the user's name is returned.
      */
-    public final String getUsername() {
+    public String getUsername() {
         return username;
     }
 
@@ -70,7 +70,7 @@ public class User implements Serializable {
      * Sets the users username.
      * @param username the users name.
      */
-    public final void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -78,7 +78,7 @@ public class User implements Serializable {
      * Gets the users password.
      * @return users password.
      */
-    public final String getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -86,7 +86,7 @@ public class User implements Serializable {
      * Sets the users password
      * @param password the users password.
      */
-    public final void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -95,7 +95,7 @@ public class User implements Serializable {
      * enabled or disabled.
      * @return True- enables. False- disables.
      */
-    public final Boolean getEnabled() {
+    public Boolean getEnabled() {
         return enabled;
     }
 
@@ -104,7 +104,7 @@ public class User implements Serializable {
      * 
      * @param enabled True- enables. False- disables.
      */
-    public final void setEnabled(Boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -112,7 +112,7 @@ public class User implements Serializable {
      * Get the date of the last time the account was updated.
      * @return date of the last time the account was updated.
      */
-    public final Date getLastUpdate() {
+    public Date getLastUpdate() {
         return lastUpdate;
     }
 
@@ -120,7 +120,7 @@ public class User implements Serializable {
      * Sets the date for the last time the users account was updated.
      * @param lastUpdate Date for the last time the account was updated.
      */
-    public final void setLastUpdate(Date lastUpdate) {
+    public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 
@@ -128,7 +128,7 @@ public class User implements Serializable {
      * Gets the version for the account.
      * @return version number
      */
-    public final Integer getVersion() {
+    public Integer getVersion() {
         return version;
     }
 
@@ -136,7 +136,7 @@ public class User implements Serializable {
      * Sets the version for the account.
      * @param version version number.
      */
-    public final void setVersion(Integer version) {
+    public void setVersion(Integer version) {
         this.version = version;
     }
 

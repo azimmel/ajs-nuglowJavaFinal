@@ -108,7 +108,7 @@ public class Order implements Serializable {
      * Get the orders Id.
      * @return the orders Id.
      */
-    public final Integer getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
@@ -116,7 +116,7 @@ public class Order implements Serializable {
      * Sets the orders Id.
      * @param orderId the orders Id.
      */
-    public final void setOrderId(Integer orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
@@ -124,7 +124,7 @@ public class Order implements Serializable {
      * Get the date the order was placed.
      * @return the date the order was placed.
      */
-    public final Date getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
@@ -132,7 +132,7 @@ public class Order implements Serializable {
      * Sets the date the order was placed.
      * @param orderDate the date the order was placed.
      */
-    public final void setOrderDate(Date orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -140,7 +140,7 @@ public class Order implements Serializable {
      * Gets the users username.
      * @return users username.
      */
-    public final String getUsername() {
+    public String getUsername() {
         return username;
     }
 
@@ -148,7 +148,7 @@ public class Order implements Serializable {
      * Sets the users username.
      * @param username users username.
      */
-    public final void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
@@ -156,7 +156,7 @@ public class Order implements Serializable {
      * Gets the shipping address for the users order.
      * @return the shipping address for the users order.
      */
-    public final String getShippingAddress() {
+    public String getShippingAddress() {
         return shippingAddress;
     }
 
@@ -172,7 +172,7 @@ public class Order implements Serializable {
      * Gets the items ordered.
      * @return items that have been ordered.
      */
-    public final String getItemsOrdered() {
+    public String getItemsOrdered() {
         return itemsOrdered;
     }
 
@@ -180,7 +180,7 @@ public class Order implements Serializable {
      * Sets the items ordered.
      * @param itemsOrdered items that have been ordered.
      */
-    public final void setItemsOrdered(String itemsOrdered) {
+    public void setItemsOrdered(String itemsOrdered) {
         this.itemsOrdered = itemsOrdered;
     }
 
@@ -188,7 +188,7 @@ public class Order implements Serializable {
      * Gets the subtotal for the order.
      * @return The subtotal for the order.
      */
-    public final double getSubtotal() {
+    public double getSubtotal() {
         return subtotal;
     }
 
@@ -196,7 +196,7 @@ public class Order implements Serializable {
      * Sets the subtotal for the order.
      * @param subtotal The subtotal for the order.
      */
-    public final void setSubtotal(double subtotal) {
+    public void setSubtotal(double subtotal) {
         this.subtotal = subtotal;
     }
 
@@ -204,7 +204,7 @@ public class Order implements Serializable {
      * Gets the total for the order.
      * @return The total for the order.
      */
-    public final double getTotal() {
+    public double getTotal() {
         return total;
     }
 
@@ -212,7 +212,7 @@ public class Order implements Serializable {
      * Sets the total for the order.
      * @param total the total for the order.
      */
-    public final void setTotal(double total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
@@ -220,7 +220,7 @@ public class Order implements Serializable {
      * Gets the billing address for the users order.
      * @return the billing address for the order.
      */
-    public final String getBillingAddress() {
+    public String getBillingAddress() {
         return billingAddress;
     }
 
@@ -228,7 +228,7 @@ public class Order implements Serializable {
      * Sets the billing address for the users order.
      * @param billingAddress the billing address for the order.
      */
-    public final void setBillingAddress(String billingAddress) {
+    public void setBillingAddress(String billingAddress) {
         this.billingAddress = billingAddress;
     }
 

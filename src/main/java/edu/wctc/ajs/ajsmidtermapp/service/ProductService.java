@@ -36,7 +36,7 @@ public class ProductService {
      * Finds all Products in the database.
      * @return a list of products. 
      */
-    public final List<Product> findAll() {
+    public List<Product> findAll() {
         return productRepo.findAll();
     }
     
@@ -45,7 +45,7 @@ public class ProductService {
      * @param id id of the product
      * @return List of products.
      */
-    public final Product findById(String id) {
+    public Product findById(String id) {
         if(id.isEmpty()){
             try {
                 throw new DataAccessException();
@@ -62,14 +62,7 @@ public class ProductService {
      * @param product 
      */
     @Transactional
-    public final void remove(Product product) {
-        if(product == null){
-            try {
-                throw new DataAccessException();
-            } catch (DataAccessException ex) {
-                java.util.logging.Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    public void remove(Product product) {
         LOG.debug("Deleting author: " + product.getProductName());
         productRepo.delete(product);
     }
@@ -81,7 +74,7 @@ public class ProductService {
      * @return  
      */
     @Transactional
-    public final Product edit(Product product) {
+    public Product edit(Product product) {
         if(product == null){
             try {
                 throw new DataAccessException();

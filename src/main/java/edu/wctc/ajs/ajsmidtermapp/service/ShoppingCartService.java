@@ -33,7 +33,7 @@ public class ShoppingCartService {
      * Finds all records in the database.
      * @return a list of shoppingcarts
      */
-    public final List<ShoppingCart> findAll() {
+    public List<ShoppingCart> findAll() {
         return shopRepo.findAll();
     }
     
@@ -42,7 +42,7 @@ public class ShoppingCartService {
      * @param id Id of the shopping cart.
      * @return a shopping cart record.
      */
-    public final ShoppingCart findById(int id) {
+    public ShoppingCart findById(int id) {
         if(id == 0){
             try {
                 throw new DataAccessException();
@@ -60,7 +60,7 @@ public class ShoppingCartService {
      * @param username users username.
      * @return list of shopping cart records for that username.
      */
-    public final List<ShoppingCart> findByUser(User username){
+    public List<ShoppingCart> findByUser(User username){
         if(username == null){
             try {
                 throw new DataAccessException();
@@ -76,7 +76,7 @@ public class ShoppingCartService {
      * @param item 
      */
     @Transactional
-    public final void remove(ShoppingCart item) {
+    public void remove(ShoppingCart item) {
         if(item == null){
             try {
                 throw new DataAccessException();
@@ -95,7 +95,7 @@ public class ShoppingCartService {
      * @return  
      */
     @Transactional
-    public final ShoppingCart edit(ShoppingCart item) {
+    public ShoppingCart edit(ShoppingCart item) {
         if(item == null){
             try {
                 throw new DataAccessException();

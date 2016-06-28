@@ -33,7 +33,7 @@ public class UserService {
      * Finds all user records in the database.
      * @return a list of users.
      */
-    public final List<User> findAll() {
+    public List<User> findAll() {
         return userRepo.findAll();
     }
 
@@ -42,7 +42,7 @@ public class UserService {
      * @param id Users id.- DO NOT USE THIS
      * @return The user.
      */
-    public final User findById(String id) {
+    public User findById(String id) {
         User user = (User) userRepo.findOneByUsername(id);
         return user;
     }
@@ -53,7 +53,7 @@ public class UserService {
      * @param username Users username.
      * @return User that was found by the username.
      */
-    public final User findOneByUsername(String username) {
+    public User findOneByUsername(String username) {
         return (User) userRepo.findOneByUsername(username);
     }
 
@@ -64,7 +64,7 @@ public class UserService {
      * @param user
      */
     @Transactional
-    public final void remove(User user) {
+    public void remove(User user) {
         LOG.debug("Deleting author: " + user.getUsername());
         userRepo.delete(user);
     }
@@ -77,7 +77,7 @@ public class UserService {
      * @return
      */
     @Transactional
-    public final User edit(User user) {
+    public User edit(User user) {
         return userRepo.saveAndFlush(user);
     }
 }

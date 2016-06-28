@@ -19,39 +19,46 @@
         <jsp:include page="cssBundle.jsp"/>
     </head>
     <body style="${background}">
-        
+
         <!--navigation header and wrapper start-->
         <jsp:include page="header.jsp"/>
         <sec:authorize access="hasAnyRole('ROLE_MGR')">
-        <!--Body content-->
-        <form name="productsList" id="productsList" class="forms form-horizontal" method="POST" action="<%= response.encodeURL("Nuglow?action=list")%>" onsubmit="">
-            <fieldset>
-                <legend>Administration Options</legend>
+            <!--Body content-->
+            <form name="productsList" id="productsList" class="forms form-horizontal" method="POST" action="<%= response.encodeURL("Nuglow?action=list")%>" onsubmit="">
+                <fieldset>
+                    <legend>Administration Options</legend>
 
-                <div class='form-group'>
-                    <div class="col-lg-10" style="margin-left:1.5%;">
-                        <input type="submit" name="submit" value="Products List" class="btn btn-default"/>
+                    <div class='form-group'>
+                        <div class="col-lg-10" style="margin-left:1.5%;">
+                            <input type="submit" name="submit" value="Products List" class="btn btn-default"/>
+                        </div>
                     </div>
-                </div>
-            </fieldset>
-        </form>
-        <form method="POST" name="reports" class="form-horizontal" action="<%= response.encodeRedirectURL("Nuglow?action=orderReports")%>">
-            <div class='form-group'>
+                </fieldset>
+            </form>
+            <form method="POST" name="reports" class="form-horizontal" action="<%= response.encodeRedirectURL("Nuglow?action=orderReports")%>">
+                <div class='form-group'>
                     <div class="col-lg-10" style="margin-left:1.5%;">
                         <input type="submit" name="submit" value="Order Reports" class="btn btn-default"/>
                     </div>
+                </div>
+            </form>
+            <form method="POST" name="reports" class="form-horizontal" action="<%= response.encodeRedirectURL("registration.jsp")%>">
+                <div class='form-group'>
+                    <div class="col-lg-10" style="margin-left:1.5%;">
+                        <input type="submit" name="submit" value="Add user registration" class="btn btn-default"/>
+                    </div>
+                </div>
+            </form>
+            <div class='form-group'>
+                <div class="col-lg-10 col-lg-offset-2">
+                    <button class="btn btn-default"><a href="<%= response.encodeURL("adminPreferences.jsp")%>">Administration Preferences</a></button>
+                </div>
             </div>
-        </form>
-        <div class='form-group'>
-            <div class="col-lg-10 col-lg-offset-2">
-                <button class="btn btn-default"><a href="<%= response.encodeURL("adminPreferences.jsp")%>">Administration Preferences</a></button>
-            </div>
-        </div>
 
 
-        <!--/body content-->
-        <!--footer and wrapper end-->
-        <jsp:include page="footer.jsp"/>
+            <!--/body content-->
+            <!--footer and wrapper end-->
+            <jsp:include page="footer.jsp"/>
         </sec:authorize>
     </body>
 </html>

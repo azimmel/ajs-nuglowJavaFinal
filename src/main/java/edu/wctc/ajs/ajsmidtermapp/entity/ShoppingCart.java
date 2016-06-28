@@ -63,7 +63,7 @@ public class ShoppingCart implements Serializable {
      * Gets the carts Id number.
      * @return carts Id number.
      */
-    public final Integer getCartId() {
+    public Integer getCartId() {
         return cartId;
     }
 
@@ -71,7 +71,7 @@ public class ShoppingCart implements Serializable {
      * Sets the carts Id number.
      * @param cartId id of the shopping cart record to find.
      */
-    public final void setCartId(Integer cartId) {
+    public void setCartId(Integer cartId) {
         this.cartId = cartId;
     }
 
@@ -79,7 +79,7 @@ public class ShoppingCart implements Serializable {
      * Gets the product based on the productId.
      * @return Product 
      */
-    public final Product getProductId() {
+    public Product getProductId() {
         return productId;
     }
 
@@ -87,7 +87,7 @@ public class ShoppingCart implements Serializable {
      * Sets the product based on the productId
      * @param productId Product
      */
-    public final void setProductId(Product productId) {
+    public void setProductId(Product productId) {
         this.productId = productId;
     }
 
@@ -103,7 +103,7 @@ public class ShoppingCart implements Serializable {
      * Sets the user object based on the username
      * @param username User object
      */
-    public final void setUsername(User username) {
+    public void setUsername(User username) {
         this.username = username;
     }
 
